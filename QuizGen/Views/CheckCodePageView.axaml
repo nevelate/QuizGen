@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
+             xmlns:vm="using:QuizGen.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="QuizGen.Views.CheckCodePageView"
+             x:DataType="vm:CheckCodePageViewModel">
+  <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
+    <TextBlock Text="Проверка телефона" Theme="{StaticResource TitleTextBlockStyle}" TextAlignment="Center"/>
+    <TextBlock Theme="{StaticResource CaptionTextBlockStyle}" TextAlignment="Center">
+      Мы отправили код в приложение Telegram<LineBreak/> на другом Вашем устройстве
+    </TextBlock>
+    <TextBox Name="CodeBox" Watermark="Код" MinWidth="270" HorizontalAlignment="Center"/>
+    <Button HorizontalAlignment="Center" MinWidth="270" Content="ОК" Classes="accent"
+            Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).AuthentificateCommand}"
+            CommandParameter="{Binding #CodeBox.Text}" IsDefault="True"/>
+  </StackPanel>
+</UserControl>

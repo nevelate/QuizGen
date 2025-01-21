@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
+             xmlns:vm="using:QuizGen.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="QuizGen.Views.TwoFAPageView"
+             x:DataType="vm:TwoFAPageViewModel">
+  <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
+    <TextBlock Text="Пароль" Theme="{StaticResource TitleTextBlockStyle}" TextAlignment="Center"/>
+    <TextBlock Theme="{StaticResource CaptionTextBlockStyle}" TextAlignment="Center">
+      Вы включили двухэтапную аутентификатцию.<LineBreak/>Теперь Ваш аккаунт защищён дополнительным<LineBreak/>облачным паролем.
+    </TextBlock>
+    <TextBox Name="TwoFactorBox" PasswordChar="●" Watermark="___" MinWidth="270" HorizontalAlignment="Center"/>
+    <Button HorizontalAlignment="Center" MinWidth="270" Content="ОК" Classes="accent"
+            Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).TwoFactorCheckCommand}"
+            CommandParameter="{Binding #TwoFactorBox.Text}" IsDefault="True"/>
+    <HyperlinkButton HorizontalAlignment="Center" HorizontalContentAlignment="Center" MinWidth="270" Content="Забыли пароль?"/>
+  </StackPanel>
+</UserControl>
