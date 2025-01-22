@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuizGen.ViewModels
 {
-    internal class TwoFAPageViewModel
+    public partial class TwoFAPageViewModel : ViewModelBase
     {
     }
 }

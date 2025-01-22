@@ -6,6 +6,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,21 +27,8 @@
   <ItemGroup>
     <Reference Include="Telegram.Td, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath Condition=" '$(Platform)' == 'x86' ">build\$(Configuration)\Telegram.Td.dll</HintPath>
       <HintPath Condition=" '$(Platform)' == 'x64' ">build64\$(Configuration)\Telegram.Td.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <Content Include="build\Debug\zlibd1.dll">
-      <Link>zlibd1.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <Content Include="build\Release\zlib1.dll">
-      <Link>zlib1.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <Content Include="build64\Debug\zlibd1.dll">
@@ -51,16 +39,6 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <Content Include="build64\Release\zlib1.dll">
       <Link>zlib1.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(Platform)' == 'x86' ">
-    <Content Include="build\$(Configuration)\libcrypto-3.dll">
-      <Link>libcrypto-3.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="build\$(Configuration)\libssl-3.dll">
-      <Link>libssl-3.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

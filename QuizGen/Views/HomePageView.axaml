@@ -65,14 +65,16 @@
                       Margin="8">
             <Grid ColumnDefinitions="*, auto">
               <TextBox Grid.Column="0"
-                       Watermark="File location">
+                       Watermark="File location"
+                       Text="{Binding FilePath}">
 
               </TextBox>
               <StackPanel Grid.Column="1"
                           Spacing="8"
                           Orientation="Horizontal">
                 <Button Margin="8, 0, 0, 0"
-                        Content="Open file"/>
+                        Content="Open file"
+                        Command="{Binding OpenFileCommand}"/>
                 <ui:FAComboBox SelectedIndex="0"
                                MinWidth="160"
                                VerticalAlignment="Stretch">
@@ -80,10 +82,11 @@
                   <ui:FAComboBoxItem>HEMISTestParser</ui:FAComboBoxItem>
                 </ui:FAComboBox>
                 <Button Content="Check"
-                        Classes="accent"/>
+                        Classes="accent"
+                        Command="{Binding CheckTestsCommand}"/>
               </StackPanel>
             </Grid>
-            <TextBlock Text="Tests count: 45"/>
+            <TextBlock Text="{Binding TestInfo}"/>
           </StackPanel>
         </Border>
 
@@ -102,6 +105,7 @@
             <TextBox Grid.Column="1"
                      Grid.Row="0"
                      Watermark="Input test name"
+                     Text="{Binding TestName}"
                      Margin="24, 0, 8, 0"/>
             <Button Grid.Column="2"
                     Grid.Row="0"
@@ -117,6 +121,7 @@
                      Grid.Row="2"
                      Grid.ColumnSpan="2"
                      Watermark="Input test description"
+                     Text="{Binding TestDescription}"
                      Margin="24, 0, 0, 0"/>
           </Grid>
         </Border>
@@ -149,14 +154,14 @@
               <TextBlock Text="from:"
                          VerticalAlignment="Center"/>
               <ui:NumberBox Grid.Column="1"
-                            Margin=""
+                            Value="{Binding TestRangeFrom}"
                             SpinButtonPlacementMode="Inline"/>
 
               <TextBlock Text="to:"
                          Margin="16, 0, 0, 0"
                          VerticalAlignment="Center"/>
               <ui:NumberBox Grid.Column="1"
-                            Margin=""
+                            Value="{Binding TestRangeTo}"
                             SpinButtonPlacementMode="Inline"/>
             </StackPanel>
 
@@ -167,6 +172,7 @@
             <ui:NumberBox Grid.Column="1"
                           Grid.Row="2"
                           Margin="24, 0, 0, 0"
+                          Value="{Binding TestGrouping}"
                           SpinButtonPlacementMode="Inline"/>
 
             <StackPanel Grid.Column="2"
@@ -186,7 +192,7 @@
                 CornerRadius="4"
                 Margin="4, 4, 0, 0"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <TextBlock Text="WTF" Margin="8"/>
+          <TextBlock Text="{Binding OverallInfo}" Margin="8"/>
         </Border>
       </Grid>
     </Grid>

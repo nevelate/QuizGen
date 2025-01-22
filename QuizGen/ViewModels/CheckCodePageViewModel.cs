@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuizGen.ViewModels
 {
-    internal class CheckCodePageViewModel
+    public partial class CheckCodePageViewModel : ViewModelBase
     {
     }
 }

@@ -32,6 +32,6 @@
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
     
-    <TransitioningContentControl/>
+    <TransitioningContentControl Content="{Binding CurrentPage}"/>
   </Panel>
 </Window>

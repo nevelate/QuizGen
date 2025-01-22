@@ -22,11 +22,6 @@ namespace QuizGen
 
         static TelegramClient()
         {
-            Td.Client.Execute(new TdApi.SetLogVerbosityLevel(0));
-            if (Td.Client.Execute(new TdApi.SetLogStream(new TdApi.LogStreamFile("tdlib.log", 1 << 27, false))) is TdApi.Error)
-            {
-                throw new System.IO.IOException("Write access to the current directory is required");
-            }
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;

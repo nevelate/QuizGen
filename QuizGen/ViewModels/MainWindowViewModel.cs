@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Net;
 using System.Threading.Tasks;
-using Telegram.Td;
+
+using Td = Telegram.Td;
+using TdApi = Telegram.Td.Api;
 
 namespace QuizGen.ViewModels
 {
@@ -13,25 +16,45 @@ namespace QuizGen.ViewModels
 
         public MainWindowViewModel()
         {
-            
+            TelegramClient.OnAuthorizationStateChangedEvent += OnClientAuthorizationStateChanged;
         }
 
         [RelayCommand]
-        private async Task Identificate(string? telephoneNumber)
+        private void Identificate(string? phoneNumber)
         {
-            await Task.Delay(500);
+            TelegramClient.SetPhoneNumber(phoneNumber);
         }
 
         [RelayCommand]
-        private async Task Authentificate(string? code)
+        private void Authentificate(string? code)
         {
-            await Task.Delay(500);
+            TelegramClient.CheckCode(code);
         }
 
         [RelayCommand]
-        private async Task TwoFactorCheck(string? password)
+        private void TwoFactorCheck(string? password)
         {
-            await Task.Delay(500);
+            TelegramClient.CheckPassword(password);
+        }
+
+        private void OnClientAuthorizationStateChanged(TdApi.AuthorizationState state)
+        {
+            if(state is TdApi.AuthorizationStateWaitPhoneNumber || state is TdApi.AuthorizationStateClosed)
+            {
+                CurrentPage = new InputPhonePageViewModel();
+            }
+            else if (state is TdApi.AuthorizationStateWaitCode)
+            {
+                CurrentPage = new CheckCodePageViewModel();
+            }
+            else if (state is TdApi.AuthorizationStateWaitPassword)
+            {
+                CurrentPage = new TwoFAPageViewModel();
+            }
+            else if (state is TdApi.AuthorizationStateReady)
+            {
+                CurrentPage = new HomePageViewModel();
+            }
         }
     }
 }
