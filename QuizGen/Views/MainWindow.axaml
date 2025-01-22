@@ -32,6 +32,6 @@
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
     
-    <v:HomePageView/>
+    <TransitioningContentControl/>
   </Panel>
 </Window>

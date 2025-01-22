@@ -17,6 +17,8 @@
     <Button HorizontalAlignment="Center" MinWidth="270" Content="ОК" Classes="accent"
             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).TwoFactorCheckCommand}"
             CommandParameter="{Binding #TwoFactorBox.Text}" IsDefault="True"/>
+    <!--
     <HyperlinkButton HorizontalAlignment="Center" HorizontalContentAlignment="Center" MinWidth="270" Content="Забыли пароль?"/>
+    -->
   </StackPanel>
 </UserControl>

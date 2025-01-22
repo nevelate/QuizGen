@@ -10,4 +10,9 @@ public partial class HomePageView : UserControl
     {
         InitializeComponent();
     }
+
+    private void ShowTeachingTip(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        InfoTip.IsOpen = true;
+    }
 }

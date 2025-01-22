@@ -10,8 +10,7 @@ namespace QuizGen.Models
     internal class Test
     {
         public FormattedText? Question { get; set; }
-        public FormattedText? Answer { get; set; }
 
-        public IEnumerable<FormattedText>? AnswerVariants { get; set; }
+        public IEnumerable<FormattedText>? Answers { get; set; }
     }
 }

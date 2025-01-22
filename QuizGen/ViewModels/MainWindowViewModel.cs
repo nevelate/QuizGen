@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Net;
 using System.Threading.Tasks;
 using Telegram.Td;
 
@@ -6,9 +8,13 @@ namespace QuizGen.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-#pragma warning disable CA1822 // Mark members as static
-        public string Greeting => "Welcome to Avalonia!";
-#pragma warning restore CA1822 // Mark members as static
+        [ObservableProperty]
+        private ViewModelBase currentPage;
+
+        public MainWindowViewModel()
+        {
+            
+        }
 
         [RelayCommand]
         private async Task Identificate(string? telephoneNumber)

@@ -13,15 +13,19 @@
     <TextBlock Theme="{StaticResource CaptionTextBlockStyle}" TextAlignment="Center">
       Проверьте код страны и введите свой номер<LineBreak/> телефона
     </TextBlock>
+    <!--
     <ui:FAComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
       <ui:FAComboBoxItem>O'zbekiston</ui:FAComboBoxItem>
       <ui:FAComboBoxItem>Россия</ui:FAComboBoxItem>
       <ui:FAComboBoxItem>USA</ui:FAComboBoxItem>
     </ui:FAComboBox>
-    <MaskedTextBox Name="TelephoneBox" Mask="+\9\98000000000" HorizontalAlignment="Stretch"/>
+    -->
+    <MaskedTextBox Name="TelephoneBox" HorizontalAlignment="Stretch"/>
     <Button HorizontalAlignment="Center" MinWidth="270" Content="ОК" Classes="accent"
             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IdentificateCommand}"
             CommandParameter="{Binding #TelephoneBox.Text}" IsDefault="True"/>
+    <!--
     <HyperlinkButton Content="Быстрый вход по QR-коду" HorizontalAlignment="Center"/>
+    -->
   </StackPanel>
 </UserControl>

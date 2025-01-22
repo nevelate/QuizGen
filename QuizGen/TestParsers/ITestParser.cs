@@ -9,7 +9,7 @@ namespace QuizGen.TestParsers
 {
     internal interface ITestParser
     {
-        bool OpenFile(string path);
+        void OpenFile(string path);
 
         int GetTestCount();
 
