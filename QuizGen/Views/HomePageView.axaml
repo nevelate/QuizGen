@@ -18,30 +18,16 @@
         </MenuItem>
 
         <MenuItem Header="Settings">
-          <MenuItem Header="Language">
-            <MenuItem Header="English" ToggleType="Radio" IsChecked="True"/>
-            <MenuItem Header="Русский" ToggleType="Radio"/>
-
-            <MenuItem.Icon>
-              <ui:SymbolIcon Symbol="Globe"/>
-            </MenuItem.Icon>
-          </MenuItem>
           <MenuItem Header="Theme">
             <MenuItem Header="Default" ToggleType="Radio" IsChecked="True"/>
             <MenuItem Header="Light" ToggleType="Radio"/>
             <MenuItem Header="Dark" ToggleType="Radio"/>
-
-
           </MenuItem>
           <MenuItem Header="Backdrop">
             <MenuItem Header="None" ToggleType="Radio" />
             <MenuItem Header="Mica" ToggleType="Radio"/>
             <MenuItem Header="Acrylic" ToggleType="Radio"/>
             <MenuItem Header="Acrylic (accent)" ToggleType="Radio" IsChecked="True"/>
-
-            <MenuItem.Icon>
-              <ui:SymbolIcon Symbol="ColorBackground" />
-            </MenuItem.Icon>
           </MenuItem>
         </MenuItem>
 
@@ -54,40 +40,37 @@
       </Menu>
       <Grid Grid.Row="1"
             Margin="8, 0, 8, 8"
-            RowDefinitions="auto, auto, *, auto">
+            RowDefinitions="auto, auto, auto, *">
 
         <!--Test select panel-->
         <Border Grid.Row="0"
                 CornerRadius="4"
                 Margin="4, 0, 0, 4"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <StackPanel Spacing="8"
-                      Margin="8">
-            <Grid ColumnDefinitions="*, auto">
-              <TextBox Grid.Column="0"
-                       Watermark="File location"
-                       Text="{Binding FilePath}">
+          <Grid ColumnDefinitions="*, auto"
+                Margin="8">
+            <TextBox Grid.Column="0"
+                     Watermark="File location"
+                     Text="{Binding FilePath}">
 
-              </TextBox>
-              <StackPanel Grid.Column="1"
-                          Spacing="8"
-                          Orientation="Horizontal">
-                <Button Margin="8, 0, 0, 0"
-                        Content="Open file"
-                        Command="{Binding OpenFileCommand}"/>
-                <ui:FAComboBox SelectedIndex="0"
-                               MinWidth="160"
-                               VerticalAlignment="Stretch">
-                  <ui:FAComboBoxItem>LMSTestParser</ui:FAComboBoxItem>
-                  <ui:FAComboBoxItem>HEMISTestParser</ui:FAComboBoxItem>
-                </ui:FAComboBox>
-                <Button Content="Check"
-                        Classes="accent"
-                        Command="{Binding CheckTestsCommand}"/>
-              </StackPanel>
-            </Grid>
-            <TextBlock Text="{Binding TestInfo}"/>
-          </StackPanel>
+            </TextBox>
+            <StackPanel Grid.Column="1"
+                        Spacing="8"
+                        Orientation="Horizontal">
+              <Button Margin="8, 0, 0, 0"
+                      Content="Open file"
+                      Command="{Binding OpenFileCommand}"/>
+              <ui:FAComboBox SelectedIndex="0"
+                             MinWidth="160"
+                             VerticalAlignment="Stretch">
+                <ui:FAComboBoxItem>LMSTestParser</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>HEMISTestParser</ui:FAComboBoxItem>
+              </ui:FAComboBox>
+              <Button Content="Check"
+                      Classes="accent"
+                      Command="{Binding CheckTestsCommand}"/>
+            </StackPanel>
+          </Grid>
         </Border>
 
         <!--Test settings panel 1-->
@@ -100,11 +83,10 @@
                 Margin="8">
             <TextBlock Grid.Column="0"
                        Grid.Row="0"
-                       Text="Test name:"
+                       Text="Title:"
                        VerticalAlignment="Center"/>
             <TextBox Grid.Column="1"
                      Grid.Row="0"
-                     Watermark="Input test name"
                      Text="{Binding TestName}"
                      Margin="24, 0, 8, 0"/>
             <Button Grid.Column="2"
@@ -114,13 +96,12 @@
                     Click="ShowTeachingTip"/>
 
             <TextBlock Grid.Column="0"
+                       Text="Description:"
                        Grid.Row="2"
-                       Text="Test description:"
                        VerticalAlignment="Center"/>
             <TextBox Grid.Column="1"
                      Grid.Row="2"
                      Grid.ColumnSpan="2"
-                     Watermark="Input test description"
                      Text="{Binding TestDescription}"
                      Margin="24, 0, 0, 0"/>
           </Grid>
@@ -131,16 +112,17 @@
                 CornerRadius="4"
                 Margin="4, 4, 0, 4"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <Grid RowDefinitions="auto, 8, auto, *, auto"
+          <Grid RowDefinitions="auto, 8, auto, 8, auto, 8, auto, auto"
                 ColumnDefinitions="auto, auto, *"
                 Margin="8">
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
                        VerticalAlignment="Center"
-                       Text="Test range:"/>
+                       Text="Range:"/>
             <ui:FAComboBox Grid.Column="1"
                            Grid.Row="0"
-                           SelectedIndex="0"
+                           Name="testRangeTypeCombo"
+                           SelectedIndex="{Binding TestRangeType}"
                            Margin="24, 0, 8, 0"
                            MinWidth="100">
               <ui:FAComboBoxItem>All</ui:FAComboBoxItem>
@@ -150,7 +132,8 @@
                         Grid.Row="0"
                         Spacing="8"
                         Margin="32, 0, 0, 0"
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        IsVisible="{Binding !!#testRangeTypeCombo.SelectedIndex}">
               <TextBlock Text="from:"
                          VerticalAlignment="Center"/>
               <ui:NumberBox Grid.Column="1"
@@ -168,21 +151,57 @@
             <TextBlock Grid.Row="2"
                        Grid.Column="0"
                        VerticalAlignment="Center"
-                       Text="Test grouping:"/>
+                       Text="Grouping:"/>
             <ui:NumberBox Grid.Column="1"
                           Grid.Row="2"
                           Margin="24, 0, 0, 0"
                           Value="{Binding TestGrouping}"
                           SpinButtonPlacementMode="Inline"/>
 
+            <TextBlock Grid.Row="4"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Text="Duration:"/>
+            <ui:FAComboBox Grid.Column="1"
+                           Grid.Row="4"
+                           Margin="24, 0, 0, 0"
+                           MinWidth="100"
+                           SelectedIndex="{Binding TestDurationIndex}">
+              <ui:FAComboBoxItem>10 sec</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>15 sec</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>30 sec</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>45 sec</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>1 min</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>2 min</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>3 min</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>4 min</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>5 min</ui:FAComboBoxItem>
+            </ui:FAComboBox>
+
+            <TextBlock Grid.Row="6"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Text="Shuffling:"/>
+            <ui:FAComboBox Grid.Column="1"
+                           Grid.Row="6"
+                           Margin="24, 0, 0, 0"
+                           MinWidth="100"
+                           SelectedIndex="{Binding TestShufflingIndex}">
+              <ui:FAComboBoxItem>Shuffle all</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>No shuffle</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>Only questions</ui:FAComboBoxItem>
+              <ui:FAComboBoxItem>Only answers</ui:FAComboBoxItem>
+            </ui:FAComboBox>
+
             <StackPanel Grid.Column="2"
-                        Grid.Row="4"
+                        Grid.Row="7"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal"
                         Spacing="8">
               <Button Content="Clear"/>
               <Button Content="Create"
-                      Classes="accent"/>
+                      Classes="accent"
+                      Command="{Binding CreateCommand}"/>
             </StackPanel>
           </Grid>
         </Border>
@@ -192,7 +211,13 @@
                 CornerRadius="4"
                 Margin="4, 4, 0, 0"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <TextBlock Text="{Binding OverallInfo}" Margin="8"/>
+          <TextBox Text="{Binding OverallInfo}"
+                   Margin="8"
+                   AcceptsReturn="True"
+                   IsReadOnly="True"
+                   TextWrapping="Wrap"
+                   Watermark="Debug info"
+                   Classes="clearButton"/>
         </Border>
       </Grid>
     </Grid>
@@ -202,4 +227,25 @@
                     Subtitle="\{0\} indicates automatic range"
                     Target="{Binding #InfoButton}"/>
   </Panel>
+
+  <UserControl.Styles>
+    <!--Multiline TextBox with clear button-->
+    <Style Selector="TextBox.clearButton:focus:not(TextBox:empty)">
+      <Setter Property="InnerRightContent">
+        <Template>
+          <Button Theme="{StaticResource TextBoxDeleteButtonStyle}"
+                  Command="{Binding $parent[TextBox].Clear}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{DynamicResource ControlCornerRadius}"
+                  Padding="{StaticResource HelperButtonThemePadding}"
+                  IsTabStop="False"
+                  Focusable="False"
+                  FontSize="{TemplateBinding FontSize}"
+                  Width="30"
+                  Height="30"
+                  VerticalAlignment="Top" />
+        </Template>
+      </Setter>
+    </Style>
+  </UserControl.Styles>
 </UserControl>
