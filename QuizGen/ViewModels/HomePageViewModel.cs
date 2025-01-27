@@ -2,15 +2,16 @@
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using NanoXLSX.Exceptions;
-using QuizGen.Models;
-using QuizGen.TestParsers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Td.Api;
+using TestParser;
 using Td = Telegram.Td;
 using TdApi = Telegram.Td.Api;
 
@@ -44,12 +45,35 @@ namespace QuizGen.ViewModels
         [ObservableProperty]
         private string? overallInfo;
 
+        [ObservableProperty]
+        private string? testParserName;
+
+        private IEnumerable<ITestParser> testParsers;
         private ITestParser testParser = null!;
+
         public TopLevel? TopLevel;
+
+        public ObservableCollection<string> TestParsersNames { get; set; } = [];
 
         public HomePageViewModel()
         {
             TelegramClient.OnShowKeyboardEvent += OnTelegramShowKeyboard;
+            LoadPlugins();
+        }
+
+        private void LoadPlugins()
+        {
+            testParsers = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Plugins")
+                .Select(PluginLoader.LoadPlugin)
+                .SelectMany(PluginLoader.CreateTestParsers)
+                .ToList();
+
+            foreach (var parser in testParsers)
+            {
+                TestParsersNames.Add(parser.GetType().Name);
+            }
+
+            TestParserName = TestParsersNames.First();
         }
 
         [RelayCommand]
@@ -72,7 +96,7 @@ namespace QuizGen.ViewModels
         [RelayCommand]
         private void CheckTests()
         {
-            testParser = new LMSTestParser();
+            testParser = testParsers.First(p => p.GetType().Name == TestParserName);
 
             try
             {
@@ -87,52 +111,94 @@ namespace QuizGen.ViewModels
         }
 
         [RelayCommand]
-        private void Create()
+        private async Task Create()
         {
             if (TestRangeType == 0)
             {
                 if (TestGrouping == 0)
                 {
-                    InitializeQuiz(string.Format(TestName, $"1 - {testParser.GetTestCount()}"));
+                    await InitializeQuiz(string.Format(TestName, $"1 - {testParser.GetTestCount()}"));
 
                     foreach (var test in testParser.GetAllTests())
                     {
-                        TelegramClient.SendPoll(quizbotId, test);
+                        await TelegramClient.SendPoll(quizbotId, test);
                     }
 
-                    TelegramClient.SendMessage(quizbotId, "/done");
+                    await TelegramClient.SendMessage(quizbotId, "/done");
                 }
                 else
                 {
+                    for (int i = 0; i < testParser.GetTestCount() / TestGrouping; i++)
+                    {
+                        await InitializeQuiz(string.Format(TestName, $"{i * TestGrouping + 1} - {(i + 1) * TestGrouping}"));
 
+                        foreach (var test in testParser.GetAllTests().Skip(i * TestGrouping).Take(TestGrouping))
+                        {
+                            await TelegramClient.SendPoll(quizbotId, test);
+                        }
+
+                        await TelegramClient.SendMessage(quizbotId, "/done");
+                    }
                 }
             }
             else
             {
+                var tests = testParser.GetAllTests().Skip(TestRangeFrom - 1).Take(TestRangeTo - TestRangeFrom);
 
+                if (TestGrouping == 0)
+                {
+                    await InitializeQuiz(string.Format(TestName, $"{TestRangeFrom} - {TestRangeTo}"));
+
+                    foreach (var test in tests)
+                    {
+                        await TelegramClient.SendPoll(quizbotId, test);
+                    }
+
+                    await TelegramClient.SendMessage(quizbotId, "/done");
+                }
+                else
+                {
+                    for (int i = 0; i < tests.Count() / TestGrouping; i++)
+                    {
+                        await InitializeQuiz(string.Format(TestName, $"{TestRangeFrom + i * TestGrouping + 1} - {TestRangeFrom + (i + 1) * TestGrouping}"));
+
+                        foreach (var test in tests.Skip(i * TestGrouping).Take(TestGrouping))
+                        {
+                            await TelegramClient.SendPoll(quizbotId, test);
+                        }
+
+                        await TelegramClient.SendMessage(quizbotId, "/done");
+                    }
+                }
             }
         }
 
         [RelayCommand]
         private void Clear()
         {
-
+            TestName = null;
+            TestDescription = null;
+            TestRangeType = 0;
+            TestRangeFrom = 0;
+            TestRangeTo = 0;
+            TestDurationIndex = 0;
+            TestShufflingIndex = 0;
         }
 
-        private void InitializeQuiz(string name)
+        private async Task InitializeQuiz(string name)
         {
-            TelegramClient.SendMessage(quizbotId, "/cancel");
-            TelegramClient.SendMessage(quizbotId, "/stop");
+            await TelegramClient.SendMessage(quizbotId, "/cancel");
+            await TelegramClient.SendMessage(quizbotId, "/stop");
 
-            TelegramClient.SendMessage(quizbotId, "/newquiz");
+            await TelegramClient.SendMessage(quizbotId, "/newquiz");
 
             if (string.IsNullOrEmpty(name))
             {
                 OverallInfo += "Test name cannot be empty!\n";
                 return;
             }
-            TelegramClient.SendMessage(quizbotId, TestName);
-            TelegramClient.SendMessage(quizbotId, string.IsNullOrEmpty(TestDescription) ? "/skip" : TestDescription);
+            await TelegramClient.SendMessage(quizbotId, TestName);
+            await TelegramClient.SendMessage(quizbotId, string.IsNullOrEmpty(TestDescription) ? "/skip" : TestDescription);
         }
 
         private void CreateQuiz(string name, IEnumerable<Test> tests)
@@ -149,13 +215,13 @@ namespace QuizGen.ViewModels
 
         private void OnTelegramShowKeyboard(long chatId, List<KeyboardButton> keyboard)
         {
-            if(chatId == quizbotId)
+            if (chatId == quizbotId)
             {
-                if(keyboard.Count == 4)
+                if (keyboard.Count == 4)
                 {
                     TelegramClient.SendMessage(quizbotId, keyboard[TestShufflingIndex].Text);
                 }
-                else
+                else if (keyboard.Count == 9)
                 {
                     TelegramClient.SendMessage(quizbotId, keyboard[TestDurationIndex].Text);
                 }

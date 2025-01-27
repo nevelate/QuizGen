@@ -1,13 +1,13 @@
-﻿using QuizGen.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
-namespace QuizGen.TestParsers
+namespace TestParser
 {
-    internal interface ITestParser
+    public interface ITestParser
     {
         void OpenFile(string path);
 

@@ -23,6 +23,10 @@
     <PackageReference Include="FluentAvaloniaUI" Version="2.2.0" />
     <PackageReference Include="NanoXLSX" Version="2.6.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestParser\TestParser.csproj" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="Telegram.Td, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
@@ -50,5 +54,8 @@
       <Link>libssl-3-x64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

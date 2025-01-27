@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using Avalonia;
 
 namespace QuizGen
@@ -17,6 +19,13 @@ namespace QuizGen
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .WithInterFont()
-                .LogToTrace();
+                .LogToTrace()
+                .AfterSetup(_ =>
+                {
+                    if(!Directory.Exists(Directory.GetCurrentDirectory() + "/Plugins"))
+                    {
+                        Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Plugins");
+                    }
+                });
     }
 }

@@ -60,12 +60,10 @@
               <Button Margin="8, 0, 0, 0"
                       Content="Open file"
                       Command="{Binding OpenFileCommand}"/>
-              <ui:FAComboBox SelectedIndex="0"
-                             MinWidth="160"
-                             VerticalAlignment="Stretch">
-                <ui:FAComboBoxItem>LMSTestParser</ui:FAComboBoxItem>
-                <ui:FAComboBoxItem>HEMISTestParser</ui:FAComboBoxItem>
-              </ui:FAComboBox>
+              <ui:FAComboBox MinWidth="160"
+                             VerticalAlignment="Stretch"
+                             SelectedItem="{Binding TestParserName}"
+                             ItemsSource="{Binding TestParsersNames}"/>
               <Button Content="Check"
                       Classes="accent"
                       Command="{Binding CheckTestsCommand}"/>
@@ -151,7 +149,7 @@
             <TextBlock Grid.Row="2"
                        Grid.Column="0"
                        VerticalAlignment="Center"
-                       Text="Grouping:"/>
+                       Text="Group by:"/>
             <ui:NumberBox Grid.Column="1"
                           Grid.Row="2"
                           Margin="24, 0, 0, 0"
@@ -198,7 +196,8 @@
                         HorizontalAlignment="Right"
                         Orientation="Horizontal"
                         Spacing="8">
-              <Button Content="Clear"/>
+              <Button Content="Clear"
+                      Command="{Binding ClearCommand}"/>
               <Button Content="Create"
                       Classes="accent"
                       Command="{Binding CreateCommand}"/>

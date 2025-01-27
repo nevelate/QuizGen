@@ -1,13 +1,12 @@
-﻿using QuizGen.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Telegram.Td.Api;
+using TestParser;
 using Td = Telegram.Td;
-using TdApi = Telegram.Td.Api;
 
 namespace QuizGen
 {
@@ -15,10 +14,10 @@ namespace QuizGen
     {
         private static Td.Client? _client = null;
 
-        private static TdApi.AuthorizationState? _authorizationState = null;
+        private static AuthorizationState? _authorizationState = null;
 
-        public static Action<TdApi.AuthorizationState> OnAuthorizationStateChangedEvent;
-        public static Action<long, List<TdApi.KeyboardButton>> OnShowKeyboardEvent;
+        public static Action<AuthorizationState> OnAuthorizationStateChangedEvent;
+        public static Action<long, List<KeyboardButton>> OnShowKeyboardEvent;
 
         static TelegramClient()
         {
@@ -31,48 +30,60 @@ namespace QuizGen
             _client = Td.Client.Create(new UpdateHandler());
         }
 
-        public static void SendMessage(long chatId, string message)
+        public static async Task SendMessage(long chatId, string message)
         {
-            TdApi.InputMessageContent content = new TdApi.InputMessageText(new TdApi.FormattedText(message, null), null, true);
-            _client.Send(new TdApi.SendMessage(chatId, 0, null, null, null, content), null);
+            InputMessageContent content = new InputMessageText(new FormattedText(message, null), null, true);
+
+            await Task.Delay(500);
+            _client.Send(new SendMessage(chatId, 0, null, null, null, content), null);
+
         }
 
-        public static void SendPoll(long chatId, Test test)
+        public static async Task SendPoll(long chatId, Test test)
         {
-            TdApi.InputMessagePoll poll = new TdApi.InputMessagePoll(test.Question, test.Answers.ToArray(), false, new TdApi.PollTypeQuiz(), 0, 0, false);
+            InputMessagePoll poll = new InputMessagePoll(
+                new FormattedText(test.Question, null), 
+                test.Answers.Select(s => new FormattedText(s,null)).ToArray(),
+                false, 
+                new PollTypeQuiz(),
+                0, 
+                0, 
+                false);
 
-            _client.Send(new TdApi.SendMessage(chatId, 0, null, null, null, poll), null);
+            await Task.Delay(500);
+            _client.Send(new SendMessage(chatId, 0, null, null, null, poll), null);
+
         }
 
         public static void SetPhoneNumber(string phoneNumber)
         {
-            _client.Send(new TdApi.SetAuthenticationPhoneNumber(phoneNumber, null), new AuthorizationRequestHandler());
+            _client.Send(new SetAuthenticationPhoneNumber(phoneNumber, null), new AuthorizationRequestHandler());
         }
 
         public static void CheckCode(string code)
         {
-            _client.Send(new TdApi.CheckAuthenticationCode(code) , new AuthorizationRequestHandler());
+            _client.Send(new CheckAuthenticationCode(code) , new AuthorizationRequestHandler());
         }
 
         public static void CheckPassword(string password)
         {
-            _client.Send(new TdApi.CheckAuthenticationPassword(password), new AuthorizationRequestHandler());
+            _client.Send(new CheckAuthenticationPassword(password), new AuthorizationRequestHandler());
         }
 
         public static void LogOut()
         {
-            _client.Send(new TdApi.LogOut(), null);
+            _client.Send(new LogOut(), null);
         }
 
-        private static void OnAuthorizationStateUpdated(TdApi.AuthorizationState authorizationState)
+        private static void OnAuthorizationStateUpdated(AuthorizationState authorizationState)
         {
             if (authorizationState != null)
             {
                 _authorizationState = authorizationState;
             }
-            if (_authorizationState is TdApi.AuthorizationStateWaitTdlibParameters)
+            if (_authorizationState is AuthorizationStateWaitTdlibParameters)
             {
-                TdApi.SetTdlibParameters request = new TdApi.SetTdlibParameters();
+                SetTdlibParameters request = new SetTdlibParameters();
                 request.DatabaseDirectory = "tdlib_db";
 
                 request.UseMessageDatabase = true;
@@ -93,19 +104,19 @@ namespace QuizGen
 
         private class UpdateHandler : Td.ClientResultHandler
         {
-            void Td.ClientResultHandler.OnResult(TdApi.BaseObject @object)
+            void Td.ClientResultHandler.OnResult(BaseObject @object)
             {
-                if (@object is TdApi.UpdateAuthorizationState state)
+                if (@object is UpdateAuthorizationState state)
                 {
                     OnAuthorizationStateUpdated(state.AuthorizationState);
                 }
-                if (@object is TdApi.UpdateNewMessage updateNewMessage)
+                if (@object is UpdateNewMessage updateNewMessage)
                 {
                     var message = updateNewMessage.Message;
 
-                    if (message.ReplyMarkup is TdApi.ReplyMarkupShowKeyboard showKeyboard)
+                    if (message.ReplyMarkup is ReplyMarkupShowKeyboard showKeyboard)
                     {
-                        var keyboard = new List<TdApi.KeyboardButton>();
+                        var keyboard = new List<KeyboardButton>();
 
                         foreach(var row in showKeyboard.Rows)
                         {
@@ -123,9 +134,9 @@ namespace QuizGen
 
         private class AuthorizationRequestHandler : Td.ClientResultHandler
         {
-            void Td.ClientResultHandler.OnResult(TdApi.BaseObject @object)
+            void Td.ClientResultHandler.OnResult(BaseObject @object)
             {
-                if (@object is TdApi.Error)
+                if (@object is Error)
                 {
                     OnAuthorizationStateUpdated(null); // repeat last action
                 }

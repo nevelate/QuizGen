@@ -3,9 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Telegram.Td.Api;
 
 using Td = Telegram.Td;
-using TdApi = Telegram.Td.Api;
 
 namespace QuizGen.ViewModels
 {
@@ -37,21 +37,21 @@ namespace QuizGen.ViewModels
             TelegramClient.CheckPassword(password);
         }
 
-        private void OnClientAuthorizationStateChanged(TdApi.AuthorizationState state)
+        private void OnClientAuthorizationStateChanged(AuthorizationState state)
         {
-            if(state is TdApi.AuthorizationStateWaitPhoneNumber || state is TdApi.AuthorizationStateClosed)
+            if(state is AuthorizationStateWaitPhoneNumber || state is AuthorizationStateClosed)
             {
                 CurrentPage = new InputPhonePageViewModel();
             }
-            else if (state is TdApi.AuthorizationStateWaitCode)
+            else if (state is AuthorizationStateWaitCode)
             {
                 CurrentPage = new CheckCodePageViewModel();
             }
-            else if (state is TdApi.AuthorizationStateWaitPassword)
+            else if (state is AuthorizationStateWaitPassword)
             {
                 CurrentPage = new TwoFAPageViewModel();
             }
-            else if (state is TdApi.AuthorizationStateReady)
+            else if (state is AuthorizationStateReady)
             {
                 CurrentPage = new HomePageViewModel();
             }

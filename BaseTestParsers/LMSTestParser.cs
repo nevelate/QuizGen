@@ -1,15 +1,14 @@
 ﻿using NanoXLSX;
-using QuizGen.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Telegram.Td.Api;
+using TestParser;
 
-namespace QuizGen.TestParsers
+namespace BaseTestParsers
 {
-    internal class LMSTestParser : ITestParser
+    public class LMSTestParser : ITestParser
     {
         private Workbook workBook = null!;
 
@@ -22,8 +21,8 @@ namespace QuizGen.TestParsers
             {
                 yield return new Test()
                 {
-                    Question = new FormattedText(cells.ElementAt(i * 5).Value.ToString(), null),
-                    Answers = cells.Skip(i * 5 + 1).Take(4).Select(c => new FormattedText(c.Value.ToString(), null))
+                    Question = cells.ElementAt(i * 5).Value.ToString(),
+                    Answers = cells.Skip(i * 5 + 1).Take(4).Select(c => c.Value.ToString())
                 };
             }
         }
