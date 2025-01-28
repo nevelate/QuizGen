@@ -136,6 +136,7 @@
                          VerticalAlignment="Center"/>
               <ui:NumberBox Grid.Column="1"
                             Value="{Binding TestRangeFrom}"
+                            Minimum="1"
                             SpinButtonPlacementMode="Inline"/>
 
               <TextBlock Text="to:"
@@ -143,6 +144,7 @@
                          VerticalAlignment="Center"/>
               <ui:NumberBox Grid.Column="1"
                             Value="{Binding TestRangeTo}"
+                            Minimum="1"
                             SpinButtonPlacementMode="Inline"/>
             </StackPanel>
 
@@ -154,6 +156,7 @@
                           Grid.Row="2"
                           Margin="24, 0, 0, 0"
                           Value="{Binding TestGrouping}"
+                          Minimum="0"
                           SpinButtonPlacementMode="Inline"/>
 
             <TextBlock Grid.Row="4"
@@ -221,9 +224,9 @@
       </Grid>
     </Grid>
     <ui:TeachingTip Name="InfoTip"
-                    IconSource="i"
+                    IconSource="ImportantFilled"
                     Title="Information"
-                    Subtitle="\{0\} indicates automatic range"
+                    Subtitle="Use {from} and {to} to indicate range"
                     Target="{Binding #InfoButton}"/>
   </Panel>
 
