@@ -22,7 +22,8 @@ namespace BaseTestParsers
                 yield return new Test()
                 {
                     Question = cells.ElementAt(i * 5).Value.ToString(),
-                    Answers = cells.Skip(i * 5 + 1).Take(4).Select(c => c.Value.ToString())
+                    CorrectAnswer = cells.ElementAt(i * 5 + 1).Value.ToString(),
+                    OtherAnswers = cells.Skip(i * 5 + 2).Take(3).Select(c => c.Value.ToString())
                 };
             }
         }

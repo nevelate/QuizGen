@@ -35,7 +35,6 @@ namespace QuizGen
         public static Task SendMessage(long chatId, string message)
         {
             var tcs = new TaskCompletionSource();
-
             void Handler(long chatId)
             {
                 if (chatId == quizbotId)
@@ -44,10 +43,10 @@ namespace QuizGen
                     OnReceivedMessageEvent -= Handler;
                 }
             }
+            OnReceivedMessageEvent += Handler;
 
             InputMessageContent content = new InputMessageText(new FormattedText(message, null), null, true);
 
-            OnReceivedMessageEvent += Handler;
             _client.Send(new SendMessage(chatId, 0, null, null, null, content), null);
 
             return tcs.Task;
@@ -56,7 +55,6 @@ namespace QuizGen
         public static Task SendPoll(long chatId, Test test)
         {
             var tcs = new TaskCompletionSource();
-
             void Handler(long chatId)
             {
                 if (chatId == quizbotId)
@@ -65,17 +63,20 @@ namespace QuizGen
                     OnReceivedMessageEvent -= Handler;
                 }
             }
+            OnReceivedMessageEvent += Handler;
+
+            var answers = new List<FormattedText> { new FormattedText(test.CorrectAnswer, null) };
+            answers.AddRange(test.OtherAnswers.Select(t => new FormattedText(t, null)));
 
             InputMessagePoll poll = new InputMessagePoll(
                 new FormattedText(test.Question, null),
-                test.Answers.Select(s => new FormattedText(s, null)).ToArray(),
+                answers.ToArray(),
                 false,
                 new PollTypeQuiz(),
                 0,
                 0,
                 false);
 
-            OnReceivedMessageEvent += Handler;
             _client.Send(new SendMessage(chatId, 0, null, null, null, poll), null);
 
             return tcs.Task;

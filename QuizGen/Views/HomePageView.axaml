@@ -13,9 +13,21 @@
       <Menu Grid.Row="0"
             Margin="4, 0, 0, 0">
         <MenuItem Header="Account">
-          <MenuItem Header="About me"/>
-          <MenuItem Header="Log out"/>
-          <MenuItem Header="Exit"/>
+          <MenuItem Header="About me">
+            <MenuItem.Icon>
+              <ui:IconSourceElement IconSource="{StaticResource info_regular}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Log out">
+            <MenuItem.Icon>
+              <ui:IconSourceElement IconSource="{StaticResource sign_out_regular}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Exit">
+            <MenuItem.Icon>
+              <ui:SymbolIcon Symbol="Cancel" />
+            </MenuItem.Icon>
+          </MenuItem>
         </MenuItem>
 
         <MenuItem Header="Settings">
@@ -23,19 +35,26 @@
             <MenuItem Header="Default" ToggleType="Radio" IsChecked="True"/>
             <MenuItem Header="Light" ToggleType="Radio"/>
             <MenuItem Header="Dark" ToggleType="Radio"/>
+
+            <MenuItem.Icon>
+              <ui:IconSourceElement IconSource="{StaticResource color_regular}"/>
+            </MenuItem.Icon>
           </MenuItem>
           <MenuItem Header="Backdrop">
             <MenuItem Header="None" ToggleType="Radio" />
             <MenuItem Header="Mica" ToggleType="Radio"/>
             <MenuItem Header="Acrylic" ToggleType="Radio"/>
             <MenuItem Header="Acrylic (accent)" ToggleType="Radio" IsChecked="True"/>
+
+            <MenuItem.Icon>
+              <ui:SymbolIcon Symbol="ColorBackground" />
+            </MenuItem.Icon>
           </MenuItem>
         </MenuItem>
 
-        <MenuItem Header="Help">
+        <MenuItem Header="Reference">
           <MenuItem Header="About"/>
           <MenuItem Header="Credits"/>
-          <MenuItem Header="Contacts"/>
           <MenuItem Header="Report issue"/>
         </MenuItem>
       </Menu>

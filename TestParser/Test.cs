@@ -10,6 +10,8 @@ namespace TestParser
     {
         public string? Question { get; set; }
 
-        public IEnumerable<string?>? Answers { get; set; }
+        public string? CorrectAnswer { get; set; }
+
+        public IEnumerable<string?>? OtherAnswers { get; set; }
     }
 }
