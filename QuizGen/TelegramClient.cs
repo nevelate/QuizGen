@@ -12,12 +12,14 @@ namespace QuizGen
 {
     internal static class TelegramClient
     {
-        private static Td.Client? _client = null;
+        private static Td.Client _client = null!;
+        private const long quizbotId = 983000232;
 
         private static AuthorizationState? _authorizationState = null;
 
-        public static Action<AuthorizationState> OnAuthorizationStateChangedEvent;
-        public static Action<long, List<KeyboardButton>> OnShowKeyboardEvent;
+        public static event Action<long>? OnReceivedMessageEvent;
+        public static event Action<AuthorizationState>? OnAuthorizationStateChangedEvent;
+        public static event Action<long, List<KeyboardButton>>? OnShowKeyboardEvent;
 
         static TelegramClient()
         {
@@ -30,29 +32,53 @@ namespace QuizGen
             _client = Td.Client.Create(new UpdateHandler());
         }
 
-        public static async Task SendMessage(long chatId, string message)
+        public static Task SendMessage(long chatId, string message)
         {
+            var tcs = new TaskCompletionSource();
+
+            void Handler(long chatId)
+            {
+                if (chatId == quizbotId)
+                {
+                    tcs.SetResult();
+                    OnReceivedMessageEvent -= Handler;
+                }
+            }
+
             InputMessageContent content = new InputMessageText(new FormattedText(message, null), null, true);
 
-            await Task.Delay(500);
+            OnReceivedMessageEvent += Handler;
             _client.Send(new SendMessage(chatId, 0, null, null, null, content), null);
 
+            return tcs.Task;
         }
 
-        public static async Task SendPoll(long chatId, Test test)
+        public static Task SendPoll(long chatId, Test test)
         {
+            var tcs = new TaskCompletionSource();
+
+            void Handler(long chatId)
+            {
+                if (chatId == quizbotId)
+                {
+                    tcs.SetResult();
+                    OnReceivedMessageEvent -= Handler;
+                }
+            }
+
             InputMessagePoll poll = new InputMessagePoll(
-                new FormattedText(test.Question, null), 
-                test.Answers.Select(s => new FormattedText(s,null)).ToArray(),
-                false, 
+                new FormattedText(test.Question, null),
+                test.Answers.Select(s => new FormattedText(s, null)).ToArray(),
+                false,
                 new PollTypeQuiz(),
-                0, 
-                0, 
+                0,
+                0,
                 false);
 
-            await Task.Delay(500);
+            OnReceivedMessageEvent += Handler;
             _client.Send(new SendMessage(chatId, 0, null, null, null, poll), null);
 
+            return tcs.Task;
         }
 
         public static void SetPhoneNumber(string phoneNumber)
@@ -62,7 +88,7 @@ namespace QuizGen
 
         public static void CheckCode(string code)
         {
-            _client.Send(new CheckAuthenticationCode(code) , new AuthorizationRequestHandler());
+            _client.Send(new CheckAuthenticationCode(code), new AuthorizationRequestHandler());
         }
 
         public static void CheckPassword(string password)
@@ -114,13 +140,18 @@ namespace QuizGen
                 {
                     var message = updateNewMessage.Message;
 
+                    if (!updateNewMessage.Message.IsOutgoing)
+                    {
+                        OnReceivedMessageEvent?.Invoke(message.ChatId);
+                    }
+
                     if (message.ReplyMarkup is ReplyMarkupShowKeyboard showKeyboard)
                     {
                         var keyboard = new List<KeyboardButton>();
 
-                        foreach(var row in showKeyboard.Rows)
+                        foreach (var row in showKeyboard.Rows)
                         {
-                            foreach(var keyboardButton in row)
+                            foreach (var keyboardButton in row)
                             {
                                 keyboard.Add(keyboardButton);
                             }

@@ -13,6 +13,7 @@
       <Menu Grid.Row="0"
             Margin="4, 0, 0, 0">
         <MenuItem Header="Account">
+          <MenuItem Header="About me"/>
           <MenuItem Header="Log out"/>
           <MenuItem Header="Exit"/>
         </MenuItem>
@@ -39,7 +40,7 @@
         </MenuItem>
       </Menu>
       <Grid Grid.Row="1"
-            Margin="8, 0, 8, 8"
+            Margin="4, 0, 8, 8"
             RowDefinitions="auto, auto, auto, *">
 
         <!--Test select panel-->
@@ -62,7 +63,7 @@
                       Command="{Binding OpenFileCommand}"/>
               <ui:FAComboBox MinWidth="160"
                              VerticalAlignment="Stretch"
-                             SelectedItem="{Binding TestParserName}"
+                             SelectedItem="{Binding SelectedTestParserName}"
                              ItemsSource="{Binding TestParsersNames}"/>
               <Button Content="Check"
                       Classes="accent"
@@ -76,22 +77,29 @@
                 CornerRadius="4"
                 Margin="4, 4, 0, 4"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <Grid ColumnDefinitions="auto, *, auto"
+          <Grid ColumnDefinitions="auto, *"
                 RowDefinitions="auto, 8, auto"
                 Margin="8">
-            <TextBlock Grid.Column="0"
-                       Grid.Row="0"
-                       Text="Title:"
-                       VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="0"
+                        Grid.Row="0"
+                        Orientation="Horizontal"
+                        Spacing="4">
+              <TextBlock Text="Title:"
+                         VerticalAlignment="Center"/>
+              <HyperlinkButton Name="InfoButton"
+                               Click="ShowTeachingTip"
+                               Padding="2"
+                               VerticalAlignment="Center">
+                <ui:IconSourceElement IconSource="{StaticResource info_regular}"
+                                      Width="12"
+                                      Height="12"/>
+              </HyperlinkButton>
+            </StackPanel>
             <TextBox Grid.Column="1"
                      Grid.Row="0"
                      Text="{Binding TestName}"
-                     Margin="24, 0, 8, 0"/>
-            <Button Grid.Column="2"
-                    Grid.Row="0"
-                    Content="i"
-                    Name="InfoButton"
-                    Click="ShowTeachingTip"/>
+                     Watermark="Test name {from} - {to}"
+                     Margin="24, 0, 0, 0"/>
 
             <TextBlock Grid.Column="0"
                        Text="Description:"
@@ -121,8 +129,8 @@
                            Grid.Row="0"
                            Name="testRangeTypeCombo"
                            SelectedIndex="{Binding TestRangeType}"
-                           Margin="24, 0, 8, 0"
-                           MinWidth="100">
+                           Margin="24, 0, 0, 0"                           
+                           HorizontalAlignment="Stretch">
               <ui:FAComboBoxItem>All</ui:FAComboBoxItem>
               <ui:FAComboBoxItem>Custom</ui:FAComboBoxItem>
             </ui:FAComboBox>
@@ -157,6 +165,7 @@
                           Margin="24, 0, 0, 0"
                           Value="{Binding TestGrouping}"
                           Minimum="0"
+                          HorizontalAlignment="Stretch"
                           SpinButtonPlacementMode="Inline"/>
 
             <TextBlock Grid.Row="4"
@@ -166,7 +175,7 @@
             <ui:FAComboBox Grid.Column="1"
                            Grid.Row="4"
                            Margin="24, 0, 0, 0"
-                           MinWidth="100"
+                           HorizontalAlignment="Stretch"
                            SelectedIndex="{Binding TestDurationIndex}">
               <ui:FAComboBoxItem>10 sec</ui:FAComboBoxItem>
               <ui:FAComboBoxItem>15 sec</ui:FAComboBoxItem>
@@ -187,6 +196,7 @@
                            Grid.Row="6"
                            Margin="24, 0, 0, 0"
                            MinWidth="100"
+                           HorizontalAlignment="Stretch"
                            SelectedIndex="{Binding TestShufflingIndex}">
               <ui:FAComboBoxItem>Shuffle all</ui:FAComboBoxItem>
               <ui:FAComboBoxItem>No shuffle</ui:FAComboBoxItem>
@@ -224,8 +234,8 @@
       </Grid>
     </Grid>
     <ui:TeachingTip Name="InfoTip"
-                    IconSource="ImportantFilled"
-                    Title="Information"
+                    IconSource="{StaticResource info_regular}"
+                    Title="Title formatting"
                     Subtitle="Use {from} and {to} to indicate range"
                     Target="{Binding #InfoButton}"/>
   </Panel>
