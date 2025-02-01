@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="bodong.PropertyModels" Version="11.2.3.4" />
+  </ItemGroup>
+
 </Project>

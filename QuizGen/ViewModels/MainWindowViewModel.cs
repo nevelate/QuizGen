@@ -20,19 +20,19 @@ namespace QuizGen.ViewModels
         }
 
         [RelayCommand]
-        private void Identificate(string? phoneNumber)
+        private void Identificate(string phoneNumber)
         {
             TelegramClient.SetPhoneNumber(phoneNumber);
         }
 
         [RelayCommand]
-        private void Authentificate(string? code)
+        private void Authentificate(string code)
         {
             TelegramClient.CheckCode(code);
         }
 
         [RelayCommand]
-        private void TwoFactorCheck(string? password)
+        private void TwoFactorCheck(string password)
         {
             TelegramClient.CheckPassword(password);
         }

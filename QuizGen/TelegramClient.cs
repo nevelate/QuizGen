@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Telegram.Td;
 using Telegram.Td.Api;
 using TestParser;
 using Td = Telegram.Td;
@@ -30,6 +31,13 @@ namespace QuizGen
             }).Start();
 
             _client = Td.Client.Create(new UpdateHandler());
+        }
+
+        public static Task<User> GetUser()
+        {
+            var tcs = new TaskCompletionSource<User>();
+            _client.Send(new GetMe(), new GetUserHandler(tcs));
+            return tcs.Task;
         }
 
         public static Task SendMessage(long chatId, string message)
@@ -164,13 +172,31 @@ namespace QuizGen
             }
         }
 
-        private class AuthorizationRequestHandler : Td.ClientResultHandler
+        private class AuthorizationRequestHandler : ClientResultHandler
         {
             void Td.ClientResultHandler.OnResult(BaseObject @object)
             {
                 if (@object is Error)
                 {
                     OnAuthorizationStateUpdated(null); // repeat last action
+                }
+            }
+        }
+
+        private class GetUserHandler : ClientResultHandler
+        {
+            private TaskCompletionSource<User> _tcs;
+
+            public GetUserHandler(TaskCompletionSource<User> tcs)
+            {
+                _tcs = tcs;
+            }
+
+            public void OnResult(BaseObject @object)
+            {
+                if(@object is User user)
+                {
+                    _tcs.SetResult(user);
                 }
             }
         }

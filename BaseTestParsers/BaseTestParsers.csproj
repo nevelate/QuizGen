@@ -8,9 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NanoXLSX" Version="2.6.1" >
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </PackageReference>
+    <PackageReference Include="NanoXLSX" Version="2.6.1" />
   </ItemGroup>
 
   <ItemGroup>

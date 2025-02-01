@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Media.TextFormatting.Unicode;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,27 +22,16 @@ namespace QuizGen
 
         public static IEnumerable<ITestParser> CreateTestParsers(Assembly assembly)
         {
-            int count = 0;
-
             foreach (Type type in assembly.GetTypes())
             {
                 if (typeof(ITestParser).IsAssignableFrom(type))
                 {
-                    ITestParser result = Activator.CreateInstance(type) as ITestParser;
+                    ITestParser? result = Activator.CreateInstance(type) as ITestParser;
                     if (result != null)
                     {
-                        count++;
                         yield return result;
                     }
                 }
-            }
-
-            if (count == 0)
-            {
-                string availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
-                throw new ApplicationException(
-                    $"Can't find any type which implements ITestParser in {assembly} from {assembly.Location}.\n" +
-                    $"Available types: {availableTypes}");
             }
         }
     }

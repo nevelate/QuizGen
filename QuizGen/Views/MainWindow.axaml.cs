@@ -1,7 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Styling;
 using FluentAvalonia.UI.Windowing;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace QuizGen.Views
 {
@@ -14,14 +16,38 @@ namespace QuizGen.Views
             TitleBar.ExtendsContentIntoTitleBar = true;
             TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
 
-            SetTransparency(3);
+            Loaded += MainWindow_Loaded;                     
         }
 
-        private void SetTransparency(int index)
+        private void MainWindow_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var appSettings = ConfigurationManager.AppSettings;
+
+            if (appSettings["Theme"] != null)
+            {
+                App.Current.RequestedThemeVariant = int.Parse(appSettings["Theme"]) switch
+                {
+                    1 => ThemeVariant.Default,
+                    2 => ThemeVariant.Light,
+                    3 => ThemeVariant.Dark,
+                };
+            }
+
+            if (appSettings["Backdrop"] != null)
+            {
+                ChangeTransparency(int.Parse(appSettings["Backdrop"]));
+            }
+            else
+            {
+                ChangeTransparency(2);
+            }
+        }
+
+        public void ChangeTransparency(int index)
         {
             switch (index)
             {
-                case 0: // Default
+                case 1: // Default
                     if (this.TryFindResource("ApplicationPageBackgroundThemeBrush", App.Current?.ActualThemeVariant, out var value))
                     {
                         var brush = value as SolidColorBrush;
@@ -34,7 +60,7 @@ namespace QuizGen.Views
                     AccentAcrylicBorder.IsVisible = false;
                     AcrylicBorder.IsVisible = false;
                     break;
-                case 1: // Mica
+                case 2: // Mica
                     Background = Brushes.Transparent;
                     TransparencyLevelHint = new List<WindowTransparencyLevel>()
                         {
@@ -43,7 +69,7 @@ namespace QuizGen.Views
                     AccentAcrylicBorder.IsVisible = false;
                     AcrylicBorder.IsVisible = false;
                     break;
-                case 2: // Acrylic
+                case 3: // Acrylic
                     Background = Brushes.Transparent;
                     TransparencyLevelHint = new List<WindowTransparencyLevel>()
                         {
@@ -52,7 +78,7 @@ namespace QuizGen.Views
                     AccentAcrylicBorder.IsVisible = false;
                     AcrylicBorder.IsVisible = true;
                     break;
-                case 3: // Acrylic (Accent)
+                case 4: // Acrylic (Accent)
                     Background = Brushes.Transparent;
                     TransparencyLevelHint = new List<WindowTransparencyLevel>()
                         {

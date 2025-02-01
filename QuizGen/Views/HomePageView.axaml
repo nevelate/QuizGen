@@ -13,17 +13,21 @@
       <Menu Grid.Row="0"
             Margin="4, 0, 0, 0">
         <MenuItem Header="Account">
-          <MenuItem Header="About me">
+          <MenuItem Header="About me"
+                    Click="ShowAboutUserDialog">
             <MenuItem.Icon>
               <ui:IconSourceElement IconSource="{StaticResource info_regular}"/>
             </MenuItem.Icon>
           </MenuItem>
-          <MenuItem Header="Log out">
+          <MenuItem Header="-"/>
+          <MenuItem Header="Log out"
+                    Click="LogOut">
             <MenuItem.Icon>
               <ui:IconSourceElement IconSource="{StaticResource sign_out_regular}"/>
             </MenuItem.Icon>
           </MenuItem>
-          <MenuItem Header="Exit">
+          <MenuItem Header="Exit"
+                    Click="Exit">
             <MenuItem.Icon>
               <ui:SymbolIcon Symbol="Cancel" />
             </MenuItem.Icon>
@@ -31,7 +35,9 @@
         </MenuItem>
 
         <MenuItem Header="Settings">
-          <MenuItem Header="Theme">
+          <MenuItem Header="Theme" 
+                    Name="ThemeMenuItem"
+                    Click="ChangeTheme">
             <MenuItem Header="Default" ToggleType="Radio" IsChecked="True"/>
             <MenuItem Header="Light" ToggleType="Radio"/>
             <MenuItem Header="Dark" ToggleType="Radio"/>
@@ -40,7 +46,9 @@
               <ui:IconSourceElement IconSource="{StaticResource color_regular}"/>
             </MenuItem.Icon>
           </MenuItem>
-          <MenuItem Header="Backdrop">
+          <MenuItem Header="Backdrop"
+                    Name="BackdropMenuItem"
+                    Click="ChangeBackdrop">
             <MenuItem Header="None" ToggleType="Radio" />
             <MenuItem Header="Mica" ToggleType="Radio"/>
             <MenuItem Header="Acrylic" ToggleType="Radio"/>
@@ -53,9 +61,11 @@
         </MenuItem>
 
         <MenuItem Header="Reference">
-          <MenuItem Header="About"/>
-          <MenuItem Header="Credits"/>
-          <MenuItem Header="Report issue"/>
+          <MenuItem Header="About"
+                    Click="ShowAboutDialog"/>
+          <MenuItem Header="-"/>
+          <MenuItem Header="Report issue"
+                    Click="OpenIssuesPage"/>
         </MenuItem>
       </Menu>
       <Grid Grid.Row="1"
