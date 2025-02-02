@@ -9,7 +9,7 @@ namespace TestParser
 {
     public interface ITestParser
     {
-        void OpenFile(string path);
+        void OpenFile();
 
         int GetTestCount();
 

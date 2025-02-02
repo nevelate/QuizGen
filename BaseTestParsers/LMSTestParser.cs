@@ -1,6 +1,8 @@
 ﻿using NanoXLSX;
+using PropertyModels.ComponentModel.DataAnnotations;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +13,10 @@ namespace BaseTestParsers
     public class LMSTestParser : ITestParser
     {
         private Workbook workBook = null!;
+
+        [DisplayName("File path")]
+        [PathBrowsable(Filters = "Excel Files(*.xls;*.xlsx)|*.xls;*.xlsx")]
+        public string? FilePath { get; set; }
 
         public IEnumerable<Test> GetAllTests()
         {
@@ -33,9 +39,9 @@ namespace BaseTestParsers
             return workBook.CurrentWorksheet.GetLastDataRowNumber() / 5;
         }
 
-        public void OpenFile(string path)
+        public void OpenFile()
         {
-            workBook = Workbook.Load(path);
+            workBook = Workbook.Load(FilePath);
         }
     }
 }

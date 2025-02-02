@@ -19,7 +19,7 @@ namespace BaseTestParsers
             throw new NotImplementedException();
         }
 
-        public void OpenFile(string path)
+        public void OpenFile()
         {
             throw new NotImplementedException();
         }

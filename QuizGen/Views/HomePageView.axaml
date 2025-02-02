@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
+             xmlns:pgc="clr-namespace:Avalonia.PropertyGrid.Controls;assembly=Avalonia.PropertyGrid"
              xmlns:vm="using:QuizGen.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="QuizGen.Views.HomePageView"
@@ -35,7 +36,7 @@
         </MenuItem>
 
         <MenuItem Header="Settings">
-          <MenuItem Header="Theme" 
+          <MenuItem Header="Theme"
                     Name="ThemeMenuItem"
                     Click="ChangeTheme">
             <MenuItem Header="Default" ToggleType="Radio" IsChecked="True"/>
@@ -70,39 +71,49 @@
       </Menu>
       <Grid Grid.Row="1"
             Margin="4, 0, 8, 8"
-            RowDefinitions="auto, auto, auto, *">
+            RowDefinitions="auto, auto, auto, auto, *">
 
-        <!--Test select panel-->
+        <!--Test parser select panel-->
         <Border Grid.Row="0"
                 CornerRadius="4"
                 Margin="4, 0, 0, 4"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <Grid ColumnDefinitions="*, auto"
-                Margin="8">
-            <TextBox Grid.Column="0"
-                     Watermark="File location"
-                     Text="{Binding FilePath}">
+          <StackPanel Orientation="Horizontal"
+                      Spacing="24"
+                      Margin="8">
+            <TextBlock Text="TestParser:"
+                       VerticalAlignment="Center"/>
+            <ui:FAComboBox MinWidth="160"
+                           VerticalAlignment="Stretch"
+                           SelectedItem="{Binding SelectedTestParserName}"
+                           ItemsSource="{Binding TestParsersNames}"/>
+          </StackPanel>
+        </Border>
 
-            </TextBox>
-            <StackPanel Grid.Column="1"
-                        Spacing="8"
-                        Orientation="Horizontal">
-              <Button Margin="8, 0, 0, 0"
-                      Content="Open file"
-                      Command="{Binding OpenFileCommand}"/>
-              <ui:FAComboBox MinWidth="160"
-                             VerticalAlignment="Stretch"
-                             SelectedItem="{Binding SelectedTestParserName}"
-                             ItemsSource="{Binding TestParsersNames}"/>
-              <Button Content="Check"
-                      Classes="accent"
-                      Command="{Binding CheckTestsCommand}"/>
-            </StackPanel>
-          </Grid>
+        <!--TestParser properties-->
+        <Border Grid.Row="1"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                Margin="4, 4, 0, 4"
+                CornerRadius="4">
+          <StackPanel Spacing="8"
+                      Margin="8">
+            <TextBlock Text="TestParser properties:"
+                       Theme="{StaticResource BodyStrongTextBlockStyle}"/>
+            <pgc:PropertyGrid DataContext="{Binding TestParser}"
+                              AllowFilter="False"
+                              AllowQuickFilter="False"
+                              Margin="-4"
+                              ShowTitle="False"
+                              ShowStyle="Tiled"/>
+            <Button Content="Check"
+                    Classes="accent"
+                    Command="{Binding CheckTestsCommand}"
+                    HorizontalAlignment="Right"/>
+          </StackPanel>
         </Border>
 
         <!--Test settings panel 1-->
-        <Border Grid.Row="1"
+        <Border Grid.Row="2"
                 CornerRadius="4"
                 Margin="4, 4, 0, 4"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
@@ -143,7 +154,7 @@
         </Border>
 
         <!--Test settings panel 2-->
-        <Border Grid.Row="2"
+        <Border Grid.Row="3"
                 CornerRadius="4"
                 Margin="4, 4, 0, 4"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
@@ -158,7 +169,7 @@
                            Grid.Row="0"
                            Name="testRangeTypeCombo"
                            SelectedIndex="{Binding TestRangeType}"
-                           Margin="24, 0, 0, 0"                           
+                           Margin="24, 0, 0, 0"
                            HorizontalAlignment="Stretch">
               <ui:FAComboBoxItem>All</ui:FAComboBoxItem>
               <ui:FAComboBoxItem>Custom</ui:FAComboBoxItem>
@@ -248,7 +259,7 @@
         </Border>
 
         <!--Info panel-->
-        <Border Grid.Row="3"
+        <Border Grid.Row="4"
                 CornerRadius="4"
                 Margin="4, 4, 0, 0"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">

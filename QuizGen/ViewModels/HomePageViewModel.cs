@@ -2,6 +2,7 @@
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PropertyModels.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Td.Api;
 using TestParser;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace QuizGen.ViewModels
 {
@@ -20,8 +20,6 @@ namespace QuizGen.ViewModels
         private const string from = "{from}";
         private const string to = "{to}";
 
-        [ObservableProperty]
-        private string? filePath;
         [ObservableProperty]
         private string? testName;
         [ObservableProperty]
@@ -44,15 +42,26 @@ namespace QuizGen.ViewModels
         [ObservableProperty]
         private string? overallInfo;
 
-        [ObservableProperty]
         private string? selectedTestParserName;
 
         private IEnumerable<ITestParser> testParsers;
+
+        [ObservableProperty]
         private ITestParser testParser = null!;
 
         public TopLevel? TopLevel;
 
         public ObservableCollection<string> TestParsersNames { get; set; } = [];
+
+        public string? SelectedTestParserName
+        {
+            get => selectedTestParserName;
+            set
+            {
+                SetProperty(ref selectedTestParserName, value);
+                TestParser = testParsers.FirstOrDefault(p => p.GetType().Name == value);
+            }
+        }
 
         public HomePageViewModel()
         {
@@ -76,31 +85,12 @@ namespace QuizGen.ViewModels
         }
 
         [RelayCommand]
-        private async Task OpenFile()
-        {
-            if (TopLevel != null)
-            {
-                var storage = TopLevel.StorageProvider;
-                var defaultLocation = await storage.TryGetWellKnownFolderAsync(WellKnownFolder.Downloads);
-                var files = await storage.OpenFilePickerAsync(new FilePickerOpenOptions()
-                {
-                    AllowMultiple = false,
-                    SuggestedStartLocation = defaultLocation
-                });
-
-                if (files.Any()) FilePath = files.First().Path.AbsolutePath;
-            }
-        }
-
-        [RelayCommand]
         private void CheckTests()
         {
-            testParser = testParsers.First(p => p.GetType().Name == SelectedTestParserName);
-
             try
             {
-                testParser.OpenFile(FilePath);
-                OverallInfo += $"File loaded succesfully. Tests found: {testParser.GetTestCount()}\n";
+                TestParser.OpenFile();
+                OverallInfo += $"File loaded succesfully. Tests found: {TestParser.GetTestCount()}\n";
             }
             catch (Exception e)
             {
@@ -112,15 +102,15 @@ namespace QuizGen.ViewModels
         [RelayCommand]
         private async Task Create()
         {
-            if(testParser == null)
+            if (TestName.IsNullOrEmpty())
             {
-                OverallInfo += "Please check file first!\n";
+                OverallInfo += "Test Title cannot be null!\n";
                 return;
             }
 
             if (TestRangeType == 0)
             {
-                var testCount = testParser.GetTestCount();
+                var testCount = TestParser.GetTestCount();
 
                 if (TestGrouping == 0)
                 {
@@ -128,7 +118,7 @@ namespace QuizGen.ViewModels
                         TestName
                         .Replace(from, 1.ToString())
                         .Replace(to, testCount.ToString()),
-                        testParser.GetAllTests());
+                        TestParser.GetAllTests());
                 }
                 else
                 {
@@ -138,7 +128,7 @@ namespace QuizGen.ViewModels
                             TestName
                             .Replace(from, (i * TestGrouping + 1).ToString())
                             .Replace(to, ((i + 1) * TestGrouping > testCount ? testCount : (i + 1) * TestGrouping).ToString()),
-                            testParser.GetAllTests().Skip(i * TestGrouping).Take(TestGrouping));
+                            TestParser.GetAllTests().Skip(i * TestGrouping).Take(TestGrouping));
 
                         await Task.Delay(2000);
                     }
@@ -146,7 +136,7 @@ namespace QuizGen.ViewModels
             }
             else
             {
-                var tests = testParser.GetAllTests().Skip(TestRangeFrom - 1).Take(TestRangeTo - TestRangeFrom + 1);
+                var tests = TestParser.GetAllTests().Skip(TestRangeFrom - 1).Take(TestRangeTo - TestRangeFrom + 1);
 
                 if (TestGrouping == 0)
                 {
