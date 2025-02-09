@@ -9,10 +9,11 @@
 
   <ItemGroup>
     <PackageReference Include="NanoXLSX" Version="2.6.1" />
+    <PackageReference Include="Wordroller" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestParser\TestParser.csproj" >
+    <ProjectReference Include="..\TestParser\TestParser.csproj">
       <Private>false</Private>
       <ExcludeAssets>runtime</ExcludeAssets>
     </ProjectReference>

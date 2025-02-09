@@ -12,6 +12,7 @@ using FluentAvalonia.Core;
 using System.Linq;
 using System.Configuration;
 using FluentAvalonia.UI.Controls;
+using System.IO;
 
 namespace QuizGen.Views;
 
@@ -85,6 +86,11 @@ public partial class HomePageView : UserControl
     private void OpenIssuesPage(object? sender, RoutedEventArgs e)
     {
         OpenUrl("https://github.com/nevelate/QuizGen/issues");
+    }
+
+    private void OpenPluginsFolder(object? sender, RoutedEventArgs e)
+    {
+        OpenUrl("file:///" + Directory.GetCurrentDirectory() + "/Plugins");
     }
 
     private void ChangeBackdrop(object? sender, RoutedEventArgs e)

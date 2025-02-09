@@ -104,7 +104,7 @@ namespace QuizGen.ViewModels
         {
             if (TestName.IsNullOrEmpty())
             {
-                OverallInfo += "Test Title cannot be null!\n";
+                OverallInfo += "Test Title cannot be empty!\n";
                 return;
             }
 
@@ -194,9 +194,18 @@ namespace QuizGen.ViewModels
 
             await InitializeQuiz(name);
 
+            int index = 1;
+
             foreach (var test in tests)
             {
+                if(test.Question.Length > 255 || test.CorrectAnswer.Length > 100 || test.OtherAnswers.Any(a => a.Length > 100))
+                {
+                    OverallInfo += $"{index}-Test question, correct answer or other answers are too long!\n";
+                    continue;
+                }
+
                 await TelegramClient.SendPoll(quizbotId, test);
+                index++;
             }
 
             await TelegramClient.SendMessage(quizbotId, "/done");

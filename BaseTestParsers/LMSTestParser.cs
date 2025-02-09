@@ -14,8 +14,8 @@ namespace BaseTestParsers
     {
         private Workbook workBook = null!;
 
-        [DisplayName("File path")]
-        [PathBrowsable(Filters = "Excel Files(*.xls;*.xlsx)|*.xls;*.xlsx")]
+        [DisplayName("File path:")]
+        [PathBrowsable(Filters = "Excel Files(*.xlsx)|*.xlsx")]
         public string? FilePath { get; set; }
 
         public IEnumerable<Test> GetAllTests()
@@ -36,6 +36,9 @@ namespace BaseTestParsers
 
         public int GetTestCount()
         {
+            if(workBook.CurrentWorksheet.GetLastDataRowNumber() % 5 != 0)
+                throw new ApplicationException("Invalid test count. Check your file");
+
             return workBook.CurrentWorksheet.GetLastDataRowNumber() / 5;
         }
 

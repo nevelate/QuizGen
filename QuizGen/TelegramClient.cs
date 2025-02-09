@@ -18,7 +18,7 @@ namespace QuizGen
 
         private static AuthorizationState? _authorizationState = null;
 
-        public static event Action<long>? OnReceivedMessageEvent;
+        private static event Action? OnReceivedMessageEvent;
         public static event Action<AuthorizationState>? OnAuthorizationStateChangedEvent;
         public static event Action<long, List<KeyboardButton>>? OnShowKeyboardEvent;
 
@@ -43,13 +43,11 @@ namespace QuizGen
         public static Task SendMessage(long chatId, string message)
         {
             var tcs = new TaskCompletionSource();
-            void Handler(long chatId)
+            void Handler()
             {
-                if (chatId == quizbotId)
-                {
-                    tcs.SetResult();
-                    OnReceivedMessageEvent -= Handler;
-                }
+
+                OnReceivedMessageEvent -= Handler;
+                tcs.SetResult();
             }
             OnReceivedMessageEvent += Handler;
 
@@ -63,21 +61,18 @@ namespace QuizGen
         public static Task SendPoll(long chatId, Test test)
         {
             var tcs = new TaskCompletionSource();
-            void Handler(long chatId)
+            void Handler()
             {
-                if (chatId == quizbotId)
-                {
-                    tcs.SetResult();
-                    OnReceivedMessageEvent -= Handler;
-                }
+                OnReceivedMessageEvent -= Handler;
+                tcs.SetResult();
             }
             OnReceivedMessageEvent += Handler;
 
-            var answers = new List<FormattedText> { new FormattedText(test.CorrectAnswer, null) };
-            answers.AddRange(test.OtherAnswers.Select(t => new FormattedText(t, null)));
+            var answers = new List<FormattedText> { new FormattedText(test.CorrectAnswer, []) };
+            answers.AddRange(test.OtherAnswers.Select(t => new FormattedText(t, [])));
 
             InputMessagePoll poll = new InputMessagePoll(
-                new FormattedText(test.Question, null),
+                new FormattedText(test.Question, []),
                 answers.ToArray(),
                 false,
                 new PollTypeQuiz(),
@@ -149,9 +144,9 @@ namespace QuizGen
                 {
                     var message = updateNewMessage.Message;
 
-                    if (!updateNewMessage.Message.IsOutgoing)
+                    if (!message.IsOutgoing && message.ChatId == quizbotId)
                     {
-                        OnReceivedMessageEvent?.Invoke(message.ChatId);
+                        OnReceivedMessageEvent?.Invoke();
                     }
 
                     if (message.ReplyMarkup is ReplyMarkupShowKeyboard showKeyboard)
@@ -194,7 +189,7 @@ namespace QuizGen
 
             public void OnResult(BaseObject @object)
             {
-                if(@object is User user)
+                if (@object is User user)
                 {
                     _tcs.SetResult(user);
                 }

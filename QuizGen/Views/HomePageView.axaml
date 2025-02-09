@@ -15,18 +15,10 @@
             Margin="4, 0, 0, 0">
         <MenuItem Header="Account">
           <MenuItem Header="About me"
-                    Click="ShowAboutUserDialog">
-            <MenuItem.Icon>
-              <ui:IconSourceElement IconSource="{StaticResource info_regular}"/>
-            </MenuItem.Icon>
-          </MenuItem>
+                    Click="ShowAboutUserDialog"/>
           <MenuItem Header="-"/>
           <MenuItem Header="Log out"
-                    Click="LogOut">
-            <MenuItem.Icon>
-              <ui:IconSourceElement IconSource="{StaticResource sign_out_regular}"/>
-            </MenuItem.Icon>
-          </MenuItem>
+                    Click="LogOut"/>
           <MenuItem Header="Exit"
                     Click="Exit">
             <MenuItem.Icon>
@@ -44,7 +36,7 @@
             <MenuItem Header="Dark" ToggleType="Radio"/>
 
             <MenuItem.Icon>
-              <ui:IconSourceElement IconSource="{StaticResource color_regular}"/>
+              <ui:SymbolIcon Symbol="DarkTheme" />
             </MenuItem.Icon>
           </MenuItem>
           <MenuItem Header="Backdrop"
@@ -56,7 +48,13 @@
             <MenuItem Header="Acrylic (accent)" ToggleType="Radio" IsChecked="True"/>
 
             <MenuItem.Icon>
-              <ui:SymbolIcon Symbol="ColorBackground" />
+              <ui:SymbolIcon Symbol="ColorFill" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Plugins folder"
+                    Click="OpenPluginsFolder">
+            <MenuItem.Icon>
+              <ui:SymbolIcon Symbol="Folder" />
             </MenuItem.Icon>
           </MenuItem>
         </MenuItem>
