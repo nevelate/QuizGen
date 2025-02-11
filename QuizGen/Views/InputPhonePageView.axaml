@@ -9,9 +9,9 @@
              x:Class="QuizGen.Views.InputPhonePageView"
              x:DataType="vm:InputPhonePageViewModel">
   <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
-    <TextBlock Text="Ваш телефон" Theme="{StaticResource TitleTextBlockStyle}" TextAlignment="Center"/>
+    <TextBlock Text="Your Phone" Theme="{StaticResource TitleTextBlockStyle}" TextAlignment="Center"/>
     <TextBlock Theme="{StaticResource CaptionTextBlockStyle}" TextAlignment="Center">
-      Проверьте код страны и введите свой номер<LineBreak/> телефона
+      Please confirm your country code<LineBreak/> and enter your phone number
     </TextBlock>
     <!--
     <ui:FAComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
