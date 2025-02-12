@@ -7,9 +7,9 @@ QuizGen is an app written in C# aimed at automating generating [Quiz Bot](https:
 </picture>
 
 ## Features
-* Uses the Fluent Design system
-* Supports LMS/HEMIS test files out of the box
-* Includes a plugin system for extensibility
+* Uses Fluent Design system.
+* Supports LMS/HEMIS test files out of the box.
+* Includes a plugin system for extensibility.
 
 ## Build instructions
 FOr build instructions refer to [build.md](build.md). 
