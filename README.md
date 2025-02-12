@@ -2,27 +2,29 @@
 
 ## Description
 QuizGen is an app written in C# aimed at automating generating [Quiz Bot](https://t.me/QuizBot) quizzes.
+<picture>
+  <img src="/QuizGen.png" alt="QuizGen">
+</picture>
 
 ## Features
-- Feature 1
-- Feature 2
-- Feature 3
+* Uses Fluent Design system
+* Supports LMS/HEMIS test files out of the box.
+* Supports plugin system
 
-## Installation
-1. Clone the repository: `git clone https://github.com/nevelate/QuizGen.git`
-2. Navigate to the project directory: `cd QuizGen`
-3. Install dependencies: `dotnet restore`
+## Build
+See [build.md](build.md) for build instructions. 
 
-## Usage
-1. Build the project: `dotnet build`
-2. Run the project: `dotnet run`
+## Creating plugins
+See [plugins.md](plugins.md) for plugin creating instructions.
 
-## Contributing
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature-branch`
-3. Make your changes and commit them: `git commit -m 'Add some feature'`
-4. Push to the branch: `git push origin feature-branch`
-5. Open a pull request.
+## Used Packages
+* [Avalonia](https://github.com/AvaloniaUI/Avalonia)
+* [FluentAvalonia](https://github.com/amwx/FluentAvalonia)
+* [td](https://github.com/tdlib/td)
+* [Avalonia.PropertyGrid](https://github.com/bodong1987/Avalonia.PropertyGrid)
+* [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm)
+* [NanoXLSX](https://github.com/rabanti-github/NanoXLSX)
+* [Wordroller](https://github.com/shestakov/wordroller)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
