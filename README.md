@@ -13,7 +13,7 @@ Requires Telegram account.
 * Includes a plugin system for extensibility.
 
 ## Build instructions
-FOr build instructions refer to [build.md](build.md). 
+For build instructions refer to [build.md](build.md). 
 
 ## Creating plugins
 For instructions on creating plugins, refer to [plugins.md](plugins.md).
