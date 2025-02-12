@@ -1,7 +1,8 @@
 # QuizGen
 
 ## Description
-QuizGen is an app written in C# aimed at automating generating [Quiz Bot](https://t.me/QuizBot) quizzes.
+QuizGen is an app written in C# aimed at automating generating Telegram [Quiz Bot](https://t.me/QuizBot) quizzes.
+Requires Telegram account.
 <picture>
   <img src="/QuizGen.png" alt="QuizGen">
 </picture>
