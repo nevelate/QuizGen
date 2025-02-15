@@ -33,35 +33,41 @@
   <ItemGroup>
     <ProjectReference Include="..\TestParser\TestParser.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Telegram.Td, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath Condition=" '$(Platform)' == 'x64' ">build64\$(Configuration)\Telegram.Td.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <Content Include="build64\Debug\zlibd1.dll">
       <Link>zlibd1.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="build64\Debug\libcrypto-3-x64.dll">
+      <Link>libcrypto-3-x64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="build64\Debug\libssl-3-x64.dll">
+      <Link>libssl-3-x64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <Content Include="build64\Release\zlib1.dll">
       <Link>zlib1.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(Platform)' == 'x64' ">
-    <Content Include="build64\$(Configuration)\libcrypto-3-x64.dll">
+    <Content Include="build64\Release\libcrypto-3-x64.dll">
       <Link>libcrypto-3-x64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="build64\$(Configuration)\libssl-3-x64.dll">
+    <Content Include="build64\Release\libssl-3-x64.dll">
       <Link>libssl-3-x64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
+  </ItemGroup>  
   <ItemGroup>
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Telegram.Td">
+      <HintPath>build64\$(Configuration)\Telegram.Td.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

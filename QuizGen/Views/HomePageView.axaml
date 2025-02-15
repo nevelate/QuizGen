@@ -42,10 +42,10 @@
           <MenuItem Header="Backdrop"
                     Name="BackdropMenuItem"
                     Click="ChangeBackdrop">
-            <MenuItem Header="None" ToggleType="Radio" />
+            <MenuItem Header="None" ToggleType="Radio" IsChecked="True"/>
             <MenuItem Header="Mica" ToggleType="Radio"/>
             <MenuItem Header="Acrylic" ToggleType="Radio"/>
-            <MenuItem Header="Acrylic (accent)" ToggleType="Radio" IsChecked="True"/>
+            <MenuItem Header="Acrylic (accent)" ToggleType="Radio"/>
 
             <MenuItem.Icon>
               <ui:SymbolIcon Symbol="ColorFill" />
@@ -79,7 +79,7 @@
           <StackPanel Orientation="Horizontal"
                       Spacing="24"
                       Margin="8">
-            <TextBlock Text="TestParser:"
+            <TextBlock Text="Test Parser:"
                        VerticalAlignment="Center"/>
             <ui:FAComboBox MinWidth="160"
                            VerticalAlignment="Stretch"
@@ -95,7 +95,7 @@
                 CornerRadius="4">
           <StackPanel Spacing="8"
                       Margin="8">
-            <TextBlock Text="TestParser properties:"
+            <TextBlock Text="Test Parser properties:"
                        Theme="{StaticResource BodyStrongTextBlockStyle}"/>
             <pgc:PropertyGrid DataContext="{Binding TestParser}"
                               AllowFilter="False"

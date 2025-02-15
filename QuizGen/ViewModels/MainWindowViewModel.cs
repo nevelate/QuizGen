@@ -20,21 +20,21 @@ namespace QuizGen.ViewModels
         }
 
         [RelayCommand]
-        private void Identificate(string phoneNumber)
+        private async Task Identificate(string phoneNumber)
         {
-            TelegramClient.SetPhoneNumber(phoneNumber);
+            await TelegramClient.SetPhoneNumber(phoneNumber);
         }
 
         [RelayCommand]
-        private void Authentificate(string code)
+        private async Task Authentificate(string code)
         {
-            TelegramClient.CheckCode(code);
+            await TelegramClient.CheckCode(code);
         }
 
         [RelayCommand]
-        private void TwoFactorCheck(string password)
+        private async Task TwoFactorCheck(string password)
         {
-            TelegramClient.CheckPassword(password);
+            await TelegramClient.CheckPassword(password);
         }
 
         private void OnClientAuthorizationStateChanged(AuthorizationState state)

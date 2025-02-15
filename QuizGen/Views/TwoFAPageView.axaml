@@ -13,7 +13,7 @@
     <TextBlock Theme="{StaticResource CaptionTextBlockStyle}" TextAlignment="Center">
       You have Two-Step Verification enabled, so your<LineBreak/>account is protected with an additional password
     </TextBlock>
-    <TextBox Name="TwoFactorBox" PasswordChar="●" Watermark="Password" RevealPassword="True" MinWidth="270" HorizontalAlignment="Center"/>
+    <TextBox Name="TwoFactorBox" PasswordChar="●" Watermark="Password" Classes="revealPasswordButton" MinWidth="270" HorizontalAlignment="Center"/>
     <Button HorizontalAlignment="Center" MinWidth="270" Content="ОК" Classes="accent"
             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).TwoFactorCheckCommand}"
             CommandParameter="{Binding #TwoFactorBox.Text}" IsDefault="True"/>

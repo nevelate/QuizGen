@@ -80,8 +80,7 @@ namespace QuizGen.ViewModels
             {
                 TestParsersNames.Add(parser.GetType().Name);
             }
-
-            SelectedTestParserName = TestParsersNames.First();
+            if(testParsers.Any()) SelectedTestParserName = TestParsersNames.First();
         }
 
         [RelayCommand]

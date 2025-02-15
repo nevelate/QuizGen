@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using Telegram.Td;
 using Telegram.Td.Api;
 using TestParser;
-using Td = Telegram.Td;
 
 namespace QuizGen
 {
     internal static class TelegramClient
     {
-        private static Td.Client _client = null!;
+        private static Client _client = null!;
         private const long quizbotId = 983000232;
 
         private static AuthorizationState? _authorizationState = null;
@@ -27,10 +26,10 @@ namespace QuizGen
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
-                Td.Client.Run();
+                Client.Run();
             }).Start();
 
-            _client = Td.Client.Create(new UpdateHandler());
+            _client = Client.Create(new UpdateHandler());
         }
 
         public static Task<User> GetUser()
@@ -85,19 +84,25 @@ namespace QuizGen
             return tcs.Task;
         }
 
-        public static void SetPhoneNumber(string phoneNumber)
+        public static Task SetPhoneNumber(string phoneNumber)
         {
-            _client.Send(new SetAuthenticationPhoneNumber(phoneNumber, null), new AuthorizationRequestHandler());
+            var tcs = new TaskCompletionSource();
+            _client.Send(new SetAuthenticationPhoneNumber(phoneNumber, null), new AuthorizationRequestHandler(tcs));
+            return tcs.Task;
         }
 
-        public static void CheckCode(string code)
+        public static Task CheckCode(string code)
         {
-            _client.Send(new CheckAuthenticationCode(code), new AuthorizationRequestHandler());
+            var tcs = new TaskCompletionSource();
+            _client.Send(new CheckAuthenticationCode(code), new AuthorizationRequestHandler(tcs));
+            return tcs.Task;
         }
 
-        public static void CheckPassword(string password)
+        public static Task CheckPassword(string password)
         {
-            _client.Send(new CheckAuthenticationPassword(password), new AuthorizationRequestHandler());
+            var tcs = new TaskCompletionSource();
+            _client.Send(new CheckAuthenticationPassword(password), new AuthorizationRequestHandler(tcs));
+            return tcs.Task;
         }
 
         public static void LogOut()
@@ -124,7 +129,7 @@ namespace QuizGen
                 request.DeviceModel = "Desktop";
                 request.ApplicationVersion = "1.0";
 
-                _client.Send(request, new AuthorizationRequestHandler());
+                _client.Send(request, new AuthorizationRequestHandler(null));
             }
             else
             {
@@ -132,9 +137,9 @@ namespace QuizGen
             }
         }
 
-        private class UpdateHandler : Td.ClientResultHandler
+        private class UpdateHandler : ClientResultHandler
         {
-            void Td.ClientResultHandler.OnResult(BaseObject @object)
+            void ClientResultHandler.OnResult(BaseObject @object)
             {
                 if (@object is UpdateAuthorizationState state)
                 {
@@ -169,12 +174,20 @@ namespace QuizGen
 
         private class AuthorizationRequestHandler : ClientResultHandler
         {
-            void Td.ClientResultHandler.OnResult(BaseObject @object)
+            private TaskCompletionSource? _tcs;
+
+            public AuthorizationRequestHandler(TaskCompletionSource? tcs)
+            {
+                _tcs = tcs;
+            }
+
+            void ClientResultHandler.OnResult(BaseObject @object)
             {
                 if (@object is Error)
                 {
                     OnAuthorizationStateUpdated(null); // repeat last action
                 }
+                else _tcs?.SetResult();
             }
         }
 

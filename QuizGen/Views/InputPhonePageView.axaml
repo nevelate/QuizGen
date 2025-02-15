@@ -11,7 +11,7 @@
   <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
     <TextBlock Text="Your Phone" Theme="{StaticResource TitleTextBlockStyle}" TextAlignment="Center"/>
     <TextBlock Theme="{StaticResource CaptionTextBlockStyle}" TextAlignment="Center">
-      Please confirm your country code<LineBreak/> and enter your phone number
+      Please enter your phone number
     </TextBlock>
     <!--
     <ui:FAComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
