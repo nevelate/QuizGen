@@ -9,8 +9,11 @@
              x:Class="QuizGen.Views.InputPhonePageView"
              x:DataType="vm:InputPhonePageViewModel">
   <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
-    <TextBlock Text="Your Phone" Theme="{StaticResource TitleTextBlockStyle}" TextAlignment="Center"/>
-    <TextBlock Theme="{StaticResource CaptionTextBlockStyle}" TextAlignment="Center">
+    <TextBlock Text="Your Phone"
+               Theme="{StaticResource TitleTextBlockStyle}"
+               TextAlignment="Center"/>
+    <TextBlock Theme="{StaticResource CaptionTextBlockStyle}"
+               TextAlignment="Center">
       Please enter your phone number
     </TextBlock>
     <!--
@@ -20,10 +23,15 @@
       <ui:FAComboBoxItem>USA</ui:FAComboBoxItem>
     </ui:FAComboBox>
     -->
-    <MaskedTextBox Name="TelephoneBox" HorizontalAlignment="Stretch"/>
-    <Button HorizontalAlignment="Center" MinWidth="270" Content="ОК" Classes="accent"
+    <MaskedTextBox Name="TelephoneBox"
+                   HorizontalAlignment="Stretch"/>
+    <Button HorizontalAlignment="Center" 
+            MinWidth="270"
+            Content="ОК" 
+            Classes="accent"
             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IdentificateCommand}"
-            CommandParameter="{Binding #TelephoneBox.Text}" IsDefault="True"/>
+            CommandParameter="{Binding #TelephoneBox.Text}"
+            IsDefault="True"/>
     <!--
     <HyperlinkButton Content="Быстрый вход по QR-коду" HorizontalAlignment="Center"/>
     -->

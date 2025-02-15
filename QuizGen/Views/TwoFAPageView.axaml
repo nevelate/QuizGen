@@ -8,15 +8,29 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="QuizGen.Views.TwoFAPageView"
              x:DataType="vm:TwoFAPageViewModel">
-  <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
-    <TextBlock Text="Password" Theme="{StaticResource TitleTextBlockStyle}" TextAlignment="Center"/>
-    <TextBlock Theme="{StaticResource CaptionTextBlockStyle}" TextAlignment="Center">
+  <StackPanel VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Spacing="10">
+    <TextBlock Text="Password"
+               Theme="{StaticResource TitleTextBlockStyle}"
+               TextAlignment="Center"/>
+    <TextBlock Theme="{StaticResource CaptionTextBlockStyle}"
+               TextAlignment="Center">
       You have Two-Step Verification enabled, so your<LineBreak/>account is protected with an additional password
     </TextBlock>
-    <TextBox Name="TwoFactorBox" PasswordChar="●" Watermark="Password" Classes="revealPasswordButton" MinWidth="270" HorizontalAlignment="Center"/>
-    <Button HorizontalAlignment="Center" MinWidth="270" Content="ОК" Classes="accent"
+    <TextBox Name="TwoFactorBox"
+             PasswordChar="●"
+             Watermark="Password"
+             Classes="revealPasswordButton"
+             MinWidth="270"
+             HorizontalAlignment="Center"/>
+    <Button HorizontalAlignment="Center"
+            MinWidth="270" 
+            Content="ОК"
+            Classes="accent"
             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).TwoFactorCheckCommand}"
-            CommandParameter="{Binding #TwoFactorBox.Text}" IsDefault="True"/>
+            CommandParameter="{Binding #TwoFactorBox.Text}" 
+            IsDefault="True"/>
     <!--
     <HyperlinkButton HorizontalAlignment="Center" HorizontalContentAlignment="Center" MinWidth="270" Content="Забыли пароль?"/>
     -->

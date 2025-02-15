@@ -8,14 +8,26 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="QuizGen.Views.CheckCodePageView"
              x:DataType="vm:CheckCodePageViewModel">
-  <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
-    <TextBlock Text="Phone Verification" Theme="{StaticResource TitleTextBlockStyle}" TextAlignment="Center"/>
-    <TextBlock Theme="{StaticResource CaptionTextBlockStyle}" TextAlignment="Center">
+  <StackPanel VerticalAlignment="Center"
+              HorizontalAlignment="Center" 
+              Spacing="10">
+    <TextBlock Text="Phone Verification" 
+               Theme="{StaticResource TitleTextBlockStyle}" 
+               TextAlignment="Center"/>
+    <TextBlock Theme="{StaticResource CaptionTextBlockStyle}"
+               TextAlignment="Center">
       We've sent code to the <Run FontWeight="SemiBold">Telegram</Run> app on your<LineBreak/>other device
     </TextBlock>
-    <TextBox Name="CodeBox" Watermark="Code" MinWidth="270" HorizontalAlignment="Center"/>
-    <Button HorizontalAlignment="Center" MinWidth="270" Content="ОК" Classes="accent"
+    <TextBox Name="CodeBox"
+             Watermark="Code" 
+             MinWidth="270"
+             HorizontalAlignment="Center"/>
+    <Button HorizontalAlignment="Center"
+            MinWidth="270"
+            Content="ОК"
+            Classes="accent"
             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).AuthentificateCommand}"
-            CommandParameter="{Binding #CodeBox.Text}" IsDefault="True"/>
+            CommandParameter="{Binding #CodeBox.Text}" 
+            IsDefault="True"/>
   </StackPanel>
 </UserControl>
