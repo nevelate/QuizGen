@@ -47,7 +47,7 @@ namespace QuizGen.ViewModels
         private IEnumerable<ITestParser> testParsers;
 
         [ObservableProperty]
-        private ITestParser testParser = null!;
+        private ITestParser? testParser;
 
         public TopLevel? TopLevel;
 
@@ -106,6 +106,8 @@ namespace QuizGen.ViewModels
                 OverallInfo += "Test Title cannot be empty!\n";
                 return;
             }
+
+            OverallInfo += "If test creation does not start, try to send any message to quizbot.\n";
 
             if (TestRangeType == 0)
             {

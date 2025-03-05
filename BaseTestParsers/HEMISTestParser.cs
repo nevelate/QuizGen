@@ -19,6 +19,9 @@ namespace BaseTestParsers
         [PathBrowsable(Filters = "HEMIS Files(*.txt;*.docx)|*.txt;*.docx")]
         public string? FilePath { get; set; }
 
+        [Browsable(false)]
+        public string Description => "Parser for tests that are used in final tests in universities using HEMIS. Supports formats .txt, .docx";
+
         private bool isDocx;
         private string? data;
 

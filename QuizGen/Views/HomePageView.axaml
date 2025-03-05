@@ -42,8 +42,8 @@
           <MenuItem Header="Backdrop"
                     Name="BackdropMenuItem"
                     Click="ChangeBackdrop">
-            <MenuItem Header="None" ToggleType="Radio" IsChecked="True"/>
-            <MenuItem Header="Mica" ToggleType="Radio"/>
+            <MenuItem Header="None" ToggleType="Radio"/>
+            <MenuItem Header="Mica" ToggleType="Radio" IsChecked="True"/>
             <MenuItem Header="Acrylic" ToggleType="Radio"/>
             <MenuItem Header="Acrylic (accent)" ToggleType="Radio"/>
 
@@ -67,209 +67,217 @@
                     Click="OpenIssuesPage"/>
         </MenuItem>
       </Menu>
-      <Grid Grid.Row="1"
-            Margin="4, 0, 8, 8"
-            RowDefinitions="auto, auto, auto, auto, *">
+      <ScrollViewer Grid.Row="1">
+        <Grid Margin="4, 0, 8, 8"
+              RowDefinitions="auto, auto, auto, auto, *">
 
-        <!--Test parser select panel-->
-        <Border Grid.Row="0"
-                CornerRadius="4"
-                Margin="4, 0, 0, 4"
-                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <StackPanel Orientation="Horizontal"
-                      Spacing="24"
-                      Margin="8">
-            <TextBlock Text="Test Parser:"
-                       VerticalAlignment="Center"/>
-            <ui:FAComboBox MinWidth="160"
-                           VerticalAlignment="Stretch"
-                           SelectedItem="{Binding SelectedTestParserName}"
-                           ItemsSource="{Binding TestParsersNames}"/>
-          </StackPanel>
-        </Border>
-
-        <!--TestParser properties-->
-        <Border Grid.Row="1"
-                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                Margin="4, 4, 0, 4"
-                CornerRadius="4">
-          <StackPanel Spacing="8"
-                      Margin="8">
-            <TextBlock Text="Test Parser properties:"
-                       Theme="{StaticResource BodyStrongTextBlockStyle}"/>
-            <pgc:PropertyGrid DataContext="{Binding TestParser}"
-                              AllowFilter="False"
-                              AllowQuickFilter="False"
-                              Margin="-4"
-                              ShowTitle="False"
-                              ShowStyle="Tiled"/>
-            <Button Content="Check"
-                    Classes="accent"
-                    Command="{Binding CheckTestsCommand}"
-                    HorizontalAlignment="Right"/>
-          </StackPanel>
-        </Border>
-
-        <!--Test settings panel 1-->
-        <Border Grid.Row="2"
-                CornerRadius="4"
-                Margin="4, 4, 0, 4"
-                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <Grid ColumnDefinitions="auto, *"
-                RowDefinitions="auto, 8, auto"
-                Margin="8">
-            <StackPanel Grid.Column="0"
-                        Grid.Row="0"
-                        Orientation="Horizontal"
-                        Spacing="4">
-              <TextBlock Text="Title:"
-                         VerticalAlignment="Center"/>
-              <HyperlinkButton Name="InfoButton"
-                               Click="ShowTeachingTip"
-                               Padding="2"
-                               VerticalAlignment="Center">
-                <ui:IconSourceElement IconSource="{StaticResource info_regular}"
-                                      Width="12"
-                                      Height="12"/>
-              </HyperlinkButton>
+          <!--Test parser select panel-->
+          <Border Grid.Row="0"
+                  CornerRadius="4"
+                  Margin="4, 0, 0, 4"
+                  Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+            <StackPanel Spacing="8"
+                        Margin="8">
+              <StackPanel Orientation="Horizontal"
+                          Spacing="24">
+                <TextBlock Text="Test Parser:"
+                           VerticalAlignment="Center"/>
+                <ui:FAComboBox MinWidth="160"
+                               VerticalAlignment="Stretch"
+                               SelectedItem="{Binding SelectedTestParserName}"
+                               ItemsSource="{Binding TestParsersNames}"/>
+              </StackPanel>
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Description: "/>
+                <TextBlock TextWrapping="Wrap" Text="{Binding TestParser.Description}"/>
+              </StackPanel>
             </StackPanel>
-            <TextBox Grid.Column="1"
-                     Grid.Row="0"
-                     Text="{Binding TestName}"
-                     Watermark="Test name {from} - {to}"
-                     Margin="24, 0, 0, 0"/>
+          </Border>
 
-            <TextBlock Grid.Column="0"
-                       Text="Description:"
-                       Grid.Row="2"
-                       VerticalAlignment="Center"/>
-            <TextBox Grid.Column="1"
-                     Grid.Row="2"
-                     Grid.ColumnSpan="2"
-                     Text="{Binding TestDescription}"
-                     Margin="24, 0, 0, 0"/>
-          </Grid>
-        </Border>
-
-        <!--Test settings panel 2-->
-        <Border Grid.Row="3"
-                CornerRadius="4"
-                Margin="4, 4, 0, 4"
-                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <Grid RowDefinitions="auto, 8, auto, 8, auto, 8, auto, auto"
-                ColumnDefinitions="auto, auto, *"
-                Margin="8">
-            <TextBlock Grid.Row="0"
-                       Grid.Column="0"
-                       VerticalAlignment="Center"
-                       Text="Range:"/>
-            <ui:FAComboBox Grid.Column="1"
-                           Grid.Row="0"
-                           Name="testRangeTypeCombo"
-                           SelectedIndex="{Binding TestRangeType}"
-                           Margin="24, 0, 0, 0"
-                           HorizontalAlignment="Stretch">
-              <ui:FAComboBoxItem>All</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>Custom</ui:FAComboBoxItem>
-            </ui:FAComboBox>
-            <StackPanel Grid.Column="2"
-                        Grid.Row="0"
-                        Spacing="8"
-                        Margin="32, 0, 0, 0"
-                        Orientation="Horizontal"
-                        IsVisible="{Binding !!#testRangeTypeCombo.SelectedIndex}">
-              <TextBlock Text="from:"
-                         VerticalAlignment="Center"/>
-              <ui:NumberBox Grid.Column="1"
-                            Value="{Binding TestRangeFrom}"
-                            Minimum="1"
-                            SpinButtonPlacementMode="Inline"/>
-
-              <TextBlock Text="to:"
-                         Margin="16, 0, 0, 0"
-                         VerticalAlignment="Center"/>
-              <ui:NumberBox Grid.Column="1"
-                            Value="{Binding TestRangeTo}"
-                            Minimum="1"
-                            SpinButtonPlacementMode="Inline"/>
-            </StackPanel>
-
-            <TextBlock Grid.Row="2"
-                       Grid.Column="0"
-                       VerticalAlignment="Center"
-                       Text="Group by:"/>
-            <ui:NumberBox Grid.Column="1"
-                          Grid.Row="2"
-                          Margin="24, 0, 0, 0"
-                          Value="{Binding TestGrouping}"
-                          Minimum="0"
-                          HorizontalAlignment="Stretch"
-                          SpinButtonPlacementMode="Inline"/>
-
-            <TextBlock Grid.Row="4"
-                       Grid.Column="0"
-                       VerticalAlignment="Center"
-                       Text="Duration:"/>
-            <ui:FAComboBox Grid.Column="1"
-                           Grid.Row="4"
-                           Margin="24, 0, 0, 0"
-                           HorizontalAlignment="Stretch"
-                           SelectedIndex="{Binding TestDurationIndex}">
-              <ui:FAComboBoxItem>10 sec</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>15 sec</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>30 sec</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>45 sec</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>1 min</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>2 min</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>3 min</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>4 min</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>5 min</ui:FAComboBoxItem>
-            </ui:FAComboBox>
-
-            <TextBlock Grid.Row="6"
-                       Grid.Column="0"
-                       VerticalAlignment="Center"
-                       Text="Shuffling:"/>
-            <ui:FAComboBox Grid.Column="1"
-                           Grid.Row="6"
-                           Margin="24, 0, 0, 0"
-                           MinWidth="100"
-                           HorizontalAlignment="Stretch"
-                           SelectedIndex="{Binding TestShufflingIndex}">
-              <ui:FAComboBoxItem>Shuffle all</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>No shuffle</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>Only questions</ui:FAComboBoxItem>
-              <ui:FAComboBoxItem>Only answers</ui:FAComboBoxItem>
-            </ui:FAComboBox>
-
-            <StackPanel Grid.Column="2"
-                        Grid.Row="7"
-                        HorizontalAlignment="Right"
-                        Orientation="Horizontal"
-                        Spacing="8">
-              <Button Content="Clear"
-                      Command="{Binding ClearCommand}"/>
-              <Button Content="Create"
+          <!--TestParser properties-->
+          <Border Grid.Row="1"
+                  Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                  Margin="4, 4, 0, 4"
+                  CornerRadius="4">
+            <StackPanel Spacing="8"
+                        Margin="8">
+              <TextBlock Text="Test Parser properties:"
+                         Theme="{StaticResource BodyStrongTextBlockStyle}"/>
+              <pgc:PropertyGrid DataContext="{Binding TestParser}"
+                                AllowFilter="False"
+                                AllowQuickFilter="False"
+                                Margin="-4"
+                                ShowTitle="False"
+                                ShowStyle="Tiled"/>
+              <Button Content="Check"
                       Classes="accent"
-                      Command="{Binding CreateCommand}"/>
+                      Command="{Binding CheckTestsCommand}"
+                      HorizontalAlignment="Right"/>
             </StackPanel>
-          </Grid>
-        </Border>
+          </Border>
 
-        <!--Info panel-->
-        <Border Grid.Row="4"
-                CornerRadius="4"
-                Margin="4, 4, 0, 0"
-                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-          <TextBox Text="{Binding OverallInfo}"
-                   Margin="8"
-                   AcceptsReturn="True"
-                   IsReadOnly="True"
-                   TextWrapping="Wrap"
-                   Watermark="Debug info"
-                   Classes="clearButton"/>
-        </Border>
-      </Grid>
+          <!--Test settings panel 1-->
+          <Border Grid.Row="2"
+                  CornerRadius="4"
+                  Margin="4, 4, 0, 4"
+                  Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+            <Grid ColumnDefinitions="auto, *"
+                  RowDefinitions="auto, 8, auto"
+                  Margin="8">
+              <StackPanel Grid.Column="0"
+                          Grid.Row="0"
+                          Orientation="Horizontal"
+                          Spacing="4">
+                <TextBlock Text="Title:"
+                           VerticalAlignment="Center"/>
+                <HyperlinkButton Name="InfoButton"
+                                 Click="ShowTeachingTip"
+                                 Padding="2"
+                                 VerticalAlignment="Center">
+                  <ui:IconSourceElement IconSource="{StaticResource info_regular}"
+                                        Width="12"
+                                        Height="12"/>
+                </HyperlinkButton>
+              </StackPanel>
+              <TextBox Grid.Column="1"
+                       Grid.Row="0"
+                       Text="{Binding TestName}"
+                       Watermark="Test name {from} - {to}"
+                       Margin="24, 0, 0, 0"/>
+
+              <TextBlock Grid.Column="0"
+                         Text="Description:"
+                         Grid.Row="2"
+                         VerticalAlignment="Center"/>
+              <TextBox Grid.Column="1"
+                       Grid.Row="2"
+                       Grid.ColumnSpan="2"
+                       Text="{Binding TestDescription}"
+                       Margin="24, 0, 0, 0"/>
+            </Grid>
+          </Border>
+
+          <!--Test settings panel 2-->
+          <Border Grid.Row="3"
+                  CornerRadius="4"
+                  Margin="4, 4, 0, 4"
+                  Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+            <Grid RowDefinitions="auto, 8, auto, 8, auto, 8, auto, auto"
+                  ColumnDefinitions="auto, auto, *"
+                  Margin="8">
+              <TextBlock Grid.Row="0"
+                         Grid.Column="0"
+                         VerticalAlignment="Center"
+                         Text="Range:"/>
+              <ui:FAComboBox Grid.Column="1"
+                             Grid.Row="0"
+                             Name="testRangeTypeCombo"
+                             SelectedIndex="{Binding TestRangeType}"
+                             Margin="24, 0, 0, 0"
+                             HorizontalAlignment="Stretch">
+                <ui:FAComboBoxItem>All</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>Custom</ui:FAComboBoxItem>
+              </ui:FAComboBox>
+              <StackPanel Grid.Column="2"
+                          Grid.Row="0"
+                          Spacing="8"
+                          Margin="32, 0, 0, 0"
+                          Orientation="Horizontal"
+                          IsVisible="{Binding !!#testRangeTypeCombo.SelectedIndex}">
+                <TextBlock Text="from:"
+                           VerticalAlignment="Center"/>
+                <ui:NumberBox Grid.Column="1"
+                              Value="{Binding TestRangeFrom}"
+                              Minimum="1"
+                              SpinButtonPlacementMode="Inline"/>
+
+                <TextBlock Text="to:"
+                           Margin="16, 0, 0, 0"
+                           VerticalAlignment="Center"/>
+                <ui:NumberBox Grid.Column="1"
+                              Value="{Binding TestRangeTo}"
+                              Minimum="1"
+                              SpinButtonPlacementMode="Inline"/>
+              </StackPanel>
+
+              <TextBlock Grid.Row="2"
+                         Grid.Column="0"
+                         VerticalAlignment="Center"
+                         Text="Group by:"/>
+              <ui:NumberBox Grid.Column="1"
+                            Grid.Row="2"
+                            Margin="24, 0, 0, 0"
+                            Value="{Binding TestGrouping}"
+                            Minimum="0"
+                            HorizontalAlignment="Stretch"
+                            SpinButtonPlacementMode="Inline"/>
+
+              <TextBlock Grid.Row="4"
+                         Grid.Column="0"
+                         VerticalAlignment="Center"
+                         Text="Duration:"/>
+              <ui:FAComboBox Grid.Column="1"
+                             Grid.Row="4"
+                             Margin="24, 0, 0, 0"
+                             HorizontalAlignment="Stretch"
+                             SelectedIndex="{Binding TestDurationIndex}">
+                <ui:FAComboBoxItem>10 sec</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>15 sec</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>30 sec</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>45 sec</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>1 min</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>2 min</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>3 min</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>4 min</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>5 min</ui:FAComboBoxItem>
+              </ui:FAComboBox>
+
+              <TextBlock Grid.Row="6"
+                         Grid.Column="0"
+                         VerticalAlignment="Center"
+                         Text="Shuffling:"/>
+              <ui:FAComboBox Grid.Column="1"
+                             Grid.Row="6"
+                             Margin="24, 0, 0, 0"
+                             MinWidth="100"
+                             HorizontalAlignment="Stretch"
+                             SelectedIndex="{Binding TestShufflingIndex}">
+                <ui:FAComboBoxItem>Shuffle all</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>No shuffle</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>Only questions</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>Only answers</ui:FAComboBoxItem>
+              </ui:FAComboBox>
+
+              <StackPanel Grid.Column="2"
+                          Grid.Row="7"
+                          HorizontalAlignment="Right"
+                          Orientation="Horizontal"
+                          Spacing="8">
+                <Button Content="Clear"
+                        Command="{Binding ClearCommand}"/>
+                <Button Content="Create"
+                        Classes="accent"
+                        Command="{Binding CreateCommand}"/>
+              </StackPanel>
+            </Grid>
+          </Border>
+
+          <!--Info panel-->
+          <Border Grid.Row="4"
+                  CornerRadius="4"
+                  Margin="4, 4, 0, 0"
+                  Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+            <TextBox Text="{Binding OverallInfo}"
+                     Margin="8"
+                     MinHeight="70"
+                     AcceptsReturn="True"
+                     IsReadOnly="True"
+                     TextWrapping="Wrap"
+                     Watermark="Debug info"
+                     Classes="clearButton"/>
+          </Border>
+        </Grid>
+      </ScrollViewer>
     </Grid>
     <ui:TeachingTip Name="InfoTip"
                     IconSource="{StaticResource info_regular}"

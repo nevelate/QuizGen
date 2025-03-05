@@ -18,6 +18,9 @@ namespace BaseTestParsers
         [PathBrowsable(Filters = "Excel Files(*.xlsx)|*.xlsx")]
         public string? FilePath { get; set; }
 
+        [Browsable(false)]
+        public string Description => "Parser for tests used in final tests at TUIT University. Supports format .xlsx";
+
         public IEnumerable<Test> GetAllTests()
         {
             var count = workBook.CurrentWorksheet.GetLastDataRowNumber();
