@@ -22,9 +22,15 @@ namespace QuizGen
                 .LogToTrace()
                 .AfterSetup(_ =>
                 {
-                    if(!Directory.Exists(Directory.GetCurrentDirectory() + "/Plugins"))
+                    var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/QuizGen";
+                    if (!Directory.Exists(appDataPath))
                     {
-                        Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Plugins");
+                        Directory.CreateDirectory(appDataPath);
+                    }
+
+                    if (!Directory.Exists(appDataPath + "/Plugins"))
+                    {
+                        Directory.CreateDirectory(appDataPath + "/Plugins");
                     }
                 });
     }

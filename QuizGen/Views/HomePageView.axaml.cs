@@ -40,9 +40,14 @@ public partial class HomePageView : UserControl
         }
     }
 
-    private void ShowTeachingTip(object? sender, RoutedEventArgs e)
+    private void ShowTitleTip(object? sender, RoutedEventArgs e)
+    {        
+        TitleTip.IsOpen = true;
+    }
+
+    private void ShowGroupByTip(object? sender, RoutedEventArgs e)
     {
-        InfoTip.IsOpen = true;
+        GroupByTip.IsOpen = true;
     }
 
     private async void ShowAboutUserDialog(object? sender, RoutedEventArgs e)
@@ -81,6 +86,11 @@ public partial class HomePageView : UserControl
             IsSecondaryButtonEnabled = false,
             CloseButtonText = "OK",
         }.ShowAsync();
+    }
+
+    private void OpenGithubPage(object? sender, RoutedEventArgs e)
+    {
+        OpenUrl("https://github.com/nevelate/QuizGen");
     }
 
     private void OpenIssuesPage(object? sender, RoutedEventArgs e)

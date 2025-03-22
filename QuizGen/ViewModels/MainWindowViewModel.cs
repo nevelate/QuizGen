@@ -12,7 +12,7 @@ namespace QuizGen.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         [ObservableProperty]
-        private ViewModelBase currentPage;
+        private ViewModelBase? currentPage;
 
         public MainWindowViewModel()
         {

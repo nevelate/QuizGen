@@ -39,7 +39,7 @@ namespace BaseTestParsers
         [DisplayName("Last question cell:")]
         public string LastQuestionCell { get; set; } = "B9";
 
-        [DisplayName("Sheet name")]
+        [DisplayName("Sheet name:")]
         public string? SheetName { get; set; }
 
         public IEnumerable<Test> GetAllTests()

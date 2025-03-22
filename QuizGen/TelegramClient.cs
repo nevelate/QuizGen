@@ -119,7 +119,8 @@ namespace QuizGen
             if (_authorizationState is AuthorizationStateWaitTdlibParameters)
             {
                 SetTdlibParameters request = new SetTdlibParameters();
-                request.DatabaseDirectory = "tdlib_db";
+                request.DatabaseDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/QuizGen/tdlib_db";
+                request.FilesDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/QuizGen/tdlib_files";
 
                 request.UseMessageDatabase = true;
                 request.UseSecretChats = false;

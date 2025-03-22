@@ -33,7 +33,11 @@
   <ItemGroup>
     <ProjectReference Include="..\TestParser\TestParser.csproj" />
   </ItemGroup>
+  
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <Reference Include="Telegram.Td">
+      <HintPath>build64\Debug\Telegram.Td.dll</HintPath>
+    </Reference>
     <Content Include="build64\Debug\zlibd1.dll">
       <Link>zlibd1.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -49,6 +53,9 @@
   </ItemGroup>
   
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <Reference Include="Telegram.Td">
+      <HintPath>build64\Release\Telegram.Td.dll</HintPath>
+    </Reference>
     <Content Include="build64\Release\zlib1.dll">
       <Link>zlib1.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -64,10 +71,5 @@
   </ItemGroup>  
   <ItemGroup>
     <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Telegram.Td">
-      <HintPath>build64\$(Configuration)\Telegram.Td.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

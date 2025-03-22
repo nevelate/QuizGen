@@ -62,6 +62,8 @@
         <MenuItem Header="Reference">
           <MenuItem Header="About"
                     Click="ShowAboutDialog"/>
+          <MenuItem Header="Github page"
+                    Click="OpenGithubPage"/>
           <MenuItem Header="-"/>
           <MenuItem Header="Report issue"
                     Click="OpenIssuesPage"/>
@@ -76,22 +78,30 @@
                   CornerRadius="4"
                   Margin="4, 0, 0, 4"
                   Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-            <StackPanel Spacing="8"
-                        Margin="8">
-              <StackPanel Orientation="Horizontal"
-                          Spacing="24">
-                <TextBlock Text="Test Parser:"
-                           VerticalAlignment="Center"/>
-                <ui:FAComboBox MinWidth="160"
-                               VerticalAlignment="Stretch"
-                               SelectedItem="{Binding SelectedTestParserName}"
-                               ItemsSource="{Binding TestParsersNames}"/>
-              </StackPanel>
-              <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Description: "/>
-                <TextBlock TextWrapping="Wrap" Text="{Binding TestParser.Description}"/>
-              </StackPanel>
-            </StackPanel>
+            <Grid RowDefinitions="auto, 8, auto"
+                  ColumnDefinitions="auto, *"
+                  Margin="8">
+              <TextBlock Grid.Column="0"
+                         Grid.Row="0"
+                         Text="Test Parser:"
+                         VerticalAlignment="Center"/>
+              <ui:FAComboBox Grid.Column="1"
+                             Grid.Row="0"
+                             Margin="24, 0, 0, 0"
+                             MinWidth="160"
+                             VerticalAlignment="Stretch"
+                             SelectedItem="{Binding SelectedTestParserName}"
+                             ItemsSource="{Binding TestParsersNames}"/>
+
+              <TextBlock Grid.Column="0"
+                         Grid.Row="2"
+                         Text="Description:"/>
+              <TextBlock Grid.Column="1"
+                         Grid.Row="2"
+                         Margin="24, 0, 0, 0"
+                         TextWrapping="Wrap"
+                         Text="{Binding TestParser.Description}"/>
+            </Grid>
           </Border>
 
           <!--TestParser properties-->
@@ -130,8 +140,7 @@
                           Spacing="4">
                 <TextBlock Text="Title:"
                            VerticalAlignment="Center"/>
-                <HyperlinkButton Name="InfoButton"
-                                 Click="ShowTeachingTip"
+                <HyperlinkButton Click="ShowTitleTip"
                                  Padding="2"
                                  VerticalAlignment="Center">
                   <ui:IconSourceElement IconSource="{StaticResource info_regular}"
@@ -141,6 +150,7 @@
               </StackPanel>
               <TextBox Grid.Column="1"
                        Grid.Row="0"
+                       Name="TitleTextBox"
                        Text="{Binding TestName}"
                        Watermark="Test name {from} - {to}"
                        Margin="24, 0, 0, 0"/>
@@ -200,12 +210,24 @@
                               SpinButtonPlacementMode="Inline"/>
               </StackPanel>
 
-              <TextBlock Grid.Row="2"
-                         Grid.Column="0"
-                         VerticalAlignment="Center"
+              <StackPanel Grid.Row="2"
+                          Grid.Column="0"
+                          Spacing="4"
+                          Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
                          Text="Group by:"/>
+                <HyperlinkButton Click="ShowGroupByTip"
+                                 Padding="2"
+                                 VerticalAlignment="Center">
+                  <ui:IconSourceElement IconSource="{StaticResource info_regular}"
+                                        Width="12"
+                                        Height="12"/>
+                </HyperlinkButton>
+              </StackPanel>
+              
               <ui:NumberBox Grid.Column="1"
                             Grid.Row="2"
+                            Name="GroupByNumberBox"
                             Margin="24, 0, 0, 0"
                             Value="{Binding TestGrouping}"
                             Minimum="0"
@@ -279,11 +301,16 @@
         </Grid>
       </ScrollViewer>
     </Grid>
-    <ui:TeachingTip Name="InfoTip"
+    <ui:TeachingTip Name="TitleTip"
                     IconSource="{StaticResource info_regular}"
                     Title="Title formatting"
                     Subtitle="Use {from} and {to} to indicate range"
-                    Target="{Binding #InfoButton}"/>
+                    Target="{Binding #TitleTextBox}"/>
+    <ui:TeachingTip Name="GroupByTip"
+                    IconSource="{StaticResource info_regular}"
+                    Title="Group by"
+                    Subtitle="If selected 0 grouping is disabled, else group tests by selected amount."
+                    Target="{Binding #GroupByNumberBox}"/>
   </Panel>
 
   <UserControl.Styles>
