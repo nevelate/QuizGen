@@ -50,6 +50,11 @@ public partial class HomePageView : UserControl
         GroupByTip.IsOpen = true;
     }
 
+    private void ShowLongTestByTip(object? sender, RoutedEventArgs e)
+    {
+        LongTestTip.IsOpen = true;
+    }
+
     private async void ShowAboutUserDialog(object? sender, RoutedEventArgs e)
     {
         var user = await TelegramClient.GetUser();
@@ -100,7 +105,7 @@ public partial class HomePageView : UserControl
 
     private void OpenPluginsFolder(object? sender, RoutedEventArgs e)
     {
-        OpenUrl("file:///" + Directory.GetCurrentDirectory() + "/Plugins");
+        OpenUrl("file:///" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/QuizGen/Plugins");
     }
 
     private void ChangeBackdrop(object? sender, RoutedEventArgs e)

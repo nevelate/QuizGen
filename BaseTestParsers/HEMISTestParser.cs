@@ -50,7 +50,7 @@ namespace BaseTestParsers
 
                 yield return new Test()
                 {
-                    Question = questionRegex.Match(test).Value.Replace("+++++", ""),
+                    Question = questionRegex.Match(test).Value.Replace("+++++", "").Replace("++++", ""),
                     CorrectAnswer = correctAnswerRegex.Match(test).Value.Replace("=====# ", ""),
                     OtherAnswers = answerRegex.Matches(test).Select(m => m.Value.Replace("=====", ""))
                 };

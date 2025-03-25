@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using FluentAvalonia.UI.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -134,7 +136,7 @@ namespace QuizGen
             }
             else
             {
-                OnAuthorizationStateChangedEvent?.Invoke(_authorizationState);
+                OnAuthorizationStateChangedEvent?.Invoke(authorizationState);
             }
         }
 
@@ -184,11 +186,20 @@ namespace QuizGen
 
             void ClientResultHandler.OnResult(BaseObject @object)
             {
-                if (@object is Error)
+                if (@object is Error error)
                 {
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        new ContentDialog()
+                        {
+                            Title = "Error",
+                            Content = error.Message,
+                            CloseButtonText = "OK",
+                        }.ShowAsync();
+                    });
                     OnAuthorizationStateUpdated(null); // repeat last action
                 }
-                else _tcs?.SetResult();
+                _tcs?.SetResult();
             }
         }
 

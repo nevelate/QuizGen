@@ -30,7 +30,7 @@ namespace BaseTestParsers
         public string Description => "Parser for Excel tests. Supports format .xlsx";
 
         [DisplayName("Answer variants count:")]
-        [Range(1, 10)]
+        [Range(2, 10)]
         public int AnswerVariantsCount { get; set; } = 4;
 
         [DisplayName("First question cell:")]

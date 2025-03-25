@@ -2,6 +2,7 @@
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.Core;
 using PropertyModels.Extensions;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,9 @@ namespace QuizGen.ViewModels
         private const long quizbotId = 983000232;
         private const string from = "{from}";
         private const string to = "{to}";
+
+        private readonly List<string> letters;
+        private Random _random = null!;
 
         [ObservableProperty]
         private string? testName;
@@ -38,6 +42,8 @@ namespace QuizGen.ViewModels
         private int testDurationIndex;
         [ObservableProperty]
         private int testShufflingIndex;
+        [ObservableProperty]
+        private int longTestCreationMode;
 
         [ObservableProperty]
         private string? overallInfo;
@@ -65,13 +71,14 @@ namespace QuizGen.ViewModels
 
         public HomePageViewModel()
         {
+            letters = Enumerable.Range('A', 26).Select(i => ((char)i).ToString() + ". ").ToList();
             TelegramClient.OnShowKeyboardEvent += OnTelegramShowKeyboard;
             LoadPlugins();
         }
 
         private void LoadPlugins()
         {
-            testParsers = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Plugins")
+            testParsers = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/QuizGen/Plugins")
                 .Select(PluginLoader.LoadPlugin)
                 .SelectMany(PluginLoader.CreateTestParsers)
                 .ToList();
@@ -80,7 +87,7 @@ namespace QuizGen.ViewModels
             {
                 TestParsersNames.Add(parser.GetType().Name);
             }
-            if(testParsers.Any()) SelectedTestParserName = TestParsersNames.First();
+            if (testParsers.Any()) SelectedTestParserName = TestParsersNames.First();
         }
 
         [RelayCommand]
@@ -180,7 +187,7 @@ namespace QuizGen.ViewModels
             await TelegramClient.SendMessage(quizbotId, "/stop");
 
             await TelegramClient.SendMessage(quizbotId, "/newquiz");
-            
+
             await TelegramClient.SendMessage(quizbotId, name);
             await TelegramClient.SendMessage(quizbotId, string.IsNullOrEmpty(TestDescription) ? "/skip" : TestDescription);
         }
@@ -195,18 +202,75 @@ namespace QuizGen.ViewModels
 
             await InitializeQuiz(name);
 
-            int index = 1;
-
             foreach (var test in tests)
             {
-                if(test.Question.Length > 255 || test.CorrectAnswer.Length > 100 || test.OtherAnswers.Any(a => a.Length > 100))
+                if (test.Question.Length > 255 || test.CorrectAnswer.Length > 100 || test.OtherAnswers.Any(a => a.Length > 100))
                 {
-                    OverallInfo += $"{index}-Test question, correct answer or other answers are too long!\n";
-                    continue;
-                }
+                    if (LongTestCreationMode == 0) // send message first
+                    {
+                        _random = new Random(TestParser?.GetTestCount() ?? 49);
 
-                await TelegramClient.SendPoll(quizbotId, test);
-                index++;
+                        var lettersPiece = letters.Take(test.OtherAnswers.Count() + 1).ToList();
+                        var answerLetter = lettersPiece.ElementAt(_random.Next(lettersPiece.Count()));
+                        lettersPiece.Remove(answerLetter);
+
+                        var otherAnswers = test.OtherAnswers.OrderBy(_ => _random.Next()).ToList();
+
+                        var answers = new List<string>();
+
+                        for (int i = 0; i < lettersPiece.Count(); i++)
+                        {
+                            answers.Add(lettersPiece[i] + otherAnswers[i]);
+                        }
+
+                        answers.Add(answerLetter + test.CorrectAnswer);
+                        answers = answers.OrderBy(a => a[0]).ToList();
+
+                        if(test.Question.Length > 255)
+                        {
+                            var message = test.Question + string.Join('\n', answers);
+
+                            Test editedTest = new Test()
+                            {
+                                Question = "Variants:",
+                                CorrectAnswer = answerLetter,
+                                OtherAnswers = lettersPiece
+                            };
+
+                            await TelegramClient.SendMessage(quizbotId, message);
+                            await TelegramClient.SendPoll(quizbotId, editedTest);
+                        }
+                        else
+                        {
+                            var message = string.Join('\n', answers);
+
+                            Test editedTest = new Test()
+                            {
+                                Question = test.Question,
+                                CorrectAnswer = answerLetter,
+                                OtherAnswers = lettersPiece
+                            };
+
+                            await TelegramClient.SendMessage(quizbotId, message);
+                            await TelegramClient.SendPoll(quizbotId, editedTest);
+                        }
+                    }
+                    else if (LongTestCreationMode == 1) // trim test question/answers
+                    {
+                        Test trimmedTest = new Test()
+                        {
+                            Question = test.Question?.Length > 255 ? test.Question.Substring(0, 252) + "..." : test.Question,
+                            CorrectAnswer = test.CorrectAnswer?.Length > 100 ? test.CorrectAnswer.Substring(0, 97) + "..." : test.CorrectAnswer,
+                            OtherAnswers = test.OtherAnswers?.Select(a => a?.Length > 100 ? a.Substring(0, 97) + "..." : a)
+                        };
+
+                        await TelegramClient.SendPoll(quizbotId, trimmedTest);
+                    }
+                }
+                else
+                {
+                    await TelegramClient.SendPoll(quizbotId, test);
+                }
             }
 
             await TelegramClient.SendMessage(quizbotId, "/done");

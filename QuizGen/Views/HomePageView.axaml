@@ -172,31 +172,30 @@
                   CornerRadius="4"
                   Margin="4, 4, 0, 4"
                   Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-            <Grid RowDefinitions="auto, 8, auto, 8, auto, 8, auto, auto"
-                  ColumnDefinitions="auto, auto, *"
+            <Grid RowDefinitions="auto, 8, auto, 8, auto, 8, auto, 8, auto, auto"
+                  ColumnDefinitions="auto, 16, auto, *"
                   Margin="8">
               <TextBlock Grid.Row="0"
                          Grid.Column="0"
                          VerticalAlignment="Center"
                          Text="Range:"/>
-              <ui:FAComboBox Grid.Column="1"
+              <ui:FAComboBox Grid.Column="2"
                              Grid.Row="0"
                              Name="testRangeTypeCombo"
                              SelectedIndex="{Binding TestRangeType}"
-                             Margin="24, 0, 0, 0"
                              HorizontalAlignment="Stretch">
                 <ui:FAComboBoxItem>All</ui:FAComboBoxItem>
                 <ui:FAComboBoxItem>Custom</ui:FAComboBoxItem>
               </ui:FAComboBox>
-              <StackPanel Grid.Column="2"
+              <StackPanel Grid.Column="3"
                           Grid.Row="0"
                           Spacing="8"
-                          Margin="32, 0, 0, 0"
+                          Margin="24, 0, 0, 0"
                           Orientation="Horizontal"
                           IsVisible="{Binding !!#testRangeTypeCombo.SelectedIndex}">
                 <TextBlock Text="from:"
                            VerticalAlignment="Center"/>
-                <ui:NumberBox Grid.Column="1"
+                <ui:NumberBox Grid.Column="2"
                               Value="{Binding TestRangeFrom}"
                               Minimum="1"
                               SpinButtonPlacementMode="Inline"/>
@@ -204,7 +203,7 @@
                 <TextBlock Text="to:"
                            Margin="16, 0, 0, 0"
                            VerticalAlignment="Center"/>
-                <ui:NumberBox Grid.Column="1"
+                <ui:NumberBox Grid.Column="2"
                               Value="{Binding TestRangeTo}"
                               Minimum="1"
                               SpinButtonPlacementMode="Inline"/>
@@ -225,10 +224,9 @@
                 </HyperlinkButton>
               </StackPanel>
               
-              <ui:NumberBox Grid.Column="1"
+              <ui:NumberBox Grid.Column="2"
                             Grid.Row="2"
                             Name="GroupByNumberBox"
-                            Margin="24, 0, 0, 0"
                             Value="{Binding TestGrouping}"
                             Minimum="0"
                             HorizontalAlignment="Stretch"
@@ -238,9 +236,8 @@
                          Grid.Column="0"
                          VerticalAlignment="Center"
                          Text="Duration:"/>
-              <ui:FAComboBox Grid.Column="1"
+              <ui:FAComboBox Grid.Column="2"
                              Grid.Row="4"
-                             Margin="24, 0, 0, 0"
                              HorizontalAlignment="Stretch"
                              SelectedIndex="{Binding TestDurationIndex}">
                 <ui:FAComboBoxItem>10 sec</ui:FAComboBoxItem>
@@ -258,9 +255,8 @@
                          Grid.Column="0"
                          VerticalAlignment="Center"
                          Text="Shuffling:"/>
-              <ui:FAComboBox Grid.Column="1"
+              <ui:FAComboBox Grid.Column="2"
                              Grid.Row="6"
-                             Margin="24, 0, 0, 0"
                              MinWidth="100"
                              HorizontalAlignment="Stretch"
                              SelectedIndex="{Binding TestShufflingIndex}">
@@ -270,8 +266,31 @@
                 <ui:FAComboBoxItem>Only answers</ui:FAComboBoxItem>
               </ui:FAComboBox>
 
-              <StackPanel Grid.Column="2"
-                          Grid.Row="7"
+              <StackPanel Grid.Row="8"
+                          Grid.Column="0"
+                          Spacing="4"
+                          Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                         Text="Long test creation method:"/>
+                <HyperlinkButton Click="ShowLongTestByTip"
+                                 Padding="2"
+                                 VerticalAlignment="Center">
+                  <ui:IconSourceElement IconSource="{StaticResource info_regular}"
+                                        Width="12"
+                                        Height="12"/>
+                </HyperlinkButton>
+              </StackPanel>              
+              <ui:FAComboBox Grid.Column="2"
+                             Grid.Row="8"
+                             Name="LongTestComboBox"
+                             HorizontalAlignment="Stretch"
+                             SelectedIndex="{Binding LongTestCreationMode}">
+                <ui:FAComboBoxItem>Message</ui:FAComboBoxItem>
+                <ui:FAComboBoxItem>Trim</ui:FAComboBoxItem>
+              </ui:FAComboBox>
+
+              <StackPanel Grid.Column="3"
+                          Grid.Row="9"
                           HorizontalAlignment="Right"
                           Orientation="Horizontal"
                           Spacing="8">
@@ -311,6 +330,11 @@
                     Title="Group by"
                     Subtitle="If selected 0 grouping is disabled, else group tests by selected amount."
                     Target="{Binding #GroupByNumberBox}"/>
+    <ui:TeachingTip Name="LongTestTip"
+                    IconSource="{StaticResource info_regular}"
+                    Title="Long test creation method"
+                    Subtitle="Message - send test variants, then quiz with letters (A, B, C, ...). Trim - trim test questions/answers."
+                    Target="{Binding #LongTestComboBox}"/>
   </Panel>
 
   <UserControl.Styles>

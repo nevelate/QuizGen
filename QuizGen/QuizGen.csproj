@@ -34,7 +34,7 @@
     <ProjectReference Include="..\TestParser\TestParser.csproj" />
   </ItemGroup>
   
-  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Reference Include="Telegram.Td">
       <HintPath>build64\Debug\Telegram.Td.dll</HintPath>
     </Reference>
@@ -52,7 +52,7 @@
     </Content>
   </ItemGroup>
   
-  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+  <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
     <Reference Include="Telegram.Td">
       <HintPath>build64\Release\Telegram.Td.dll</HintPath>
     </Reference>
