@@ -72,4 +72,8 @@
   <ItemGroup>
     <Folder Include="Models\" />
   </ItemGroup>
+
+  <Target Name="CopyFiles" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
+    <Copy SourceFiles="build64\Release\Telegram.Td.dll" DestinationFolder="bin\x64\Release\net8.0"/>
+  </Target>
 </Project>
