@@ -23,6 +23,7 @@ namespace QuizGen
                 .AfterSetup(_ =>
                 {
                     var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/QuizGen";
+
                     if (!Directory.Exists(appDataPath))
                     {
                         Directory.CreateDirectory(appDataPath);

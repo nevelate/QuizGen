@@ -2,8 +2,10 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
 using FluentAvalonia.UI.Windowing;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 
 namespace QuizGen.Views
 {
@@ -21,11 +23,13 @@ namespace QuizGen.Views
 
         private void MainWindow_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            var appSettings = ConfigurationManager.AppSettings;
+            var fileMap = new ExeConfigurationFileMap();
+            fileMap.ExeConfigFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "QuizGen", "app.config");
+            var appSettings = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None).AppSettings.Settings;
 
             if (appSettings["Theme"] != null)
             {
-                App.Current.RequestedThemeVariant = int.Parse(appSettings["Theme"]) switch
+                App.Current.RequestedThemeVariant = int.Parse(appSettings["Theme"].Value) switch
                 {
                     1 => ThemeVariant.Default,
                     2 => ThemeVariant.Light,
@@ -35,7 +39,7 @@ namespace QuizGen.Views
 
             if (appSettings["Backdrop"] != null)
             {
-                ChangeTransparency(int.Parse(appSettings["Backdrop"]));
+                ChangeTransparency(int.Parse(appSettings["Backdrop"].Value));
             }
             else
             {

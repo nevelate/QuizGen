@@ -7,13 +7,13 @@ namespace WixSharpSetup
     {
         static void Main()
         {
-            var project = new Project("MyProduct",
-                              new Dir(@"%ProgramFiles%\My Company\My Product",
-                                  new File("Program.cs")));
+            var project = new Project("QuizGen",
+                              new Dir(@"%ProgramFiles%\QuizGen",
+                                  new Files(@"..\QuizGen\bin\Release\net8.0\publish\win-x64\*.*", f => !f.EndsWith(".pdb"))),
+                              new Dir(@"%AppData%\QuizGen\Plugins",
+                              new Files(@"..\BaseTestParsers\bin\Release\net8.0\*.*", f => f.EndsWith(".dll"))));
 
             project.GUID = new Guid("9eec5927-823a-4695-96a8-7d66eec07140");
-            //project.SourceBaseDir = "<input dir path>";
-            //project.OutDir = "<output dir path>";
 
             project.BuildMsi();
         }

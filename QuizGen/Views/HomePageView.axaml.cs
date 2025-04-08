@@ -18,9 +18,12 @@ namespace QuizGen.Views;
 
 public partial class HomePageView : UserControl
 {
+    private ExeConfigurationFileMap _fileMap = new ExeConfigurationFileMap();
+
     public HomePageView()
     {
         InitializeComponent();
+        _fileMap.ExeConfigFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "QuizGen", "app.config");
         Loaded += HomePageView_Loaded;
     }
 
@@ -28,15 +31,15 @@ public partial class HomePageView : UserControl
     {
         if (DataContext is HomePageViewModel vm) vm.TopLevel = TopLevel.GetTopLevel(this);
 
-        var appSettings = ConfigurationManager.AppSettings;
+        var appSettings = ConfigurationManager.OpenMappedExeConfiguration(_fileMap, ConfigurationUserLevel.None).AppSettings.Settings;
 
         if (appSettings["Theme"] != null)
         {
-            (ThemeMenuItem.GetLogicalChildren().ElementAt(int.Parse(appSettings["Theme"])) as MenuItem).IsChecked = true;
+            (ThemeMenuItem.GetLogicalChildren().ElementAt(int.Parse(appSettings["Theme"].Value)) as MenuItem).IsChecked = true;
         }
         if (appSettings["Backdrop"] != null)
         {
-            (BackdropMenuItem.GetLogicalChildren().ElementAt(int.Parse(appSettings["Backdrop"])) as MenuItem).IsChecked = true;
+            (BackdropMenuItem.GetLogicalChildren().ElementAt(int.Parse(appSettings["Backdrop"].Value)) as MenuItem).IsChecked = true;
         }
     }
 
@@ -163,7 +166,7 @@ public partial class HomePageView : UserControl
 
     private void AddUpdateAppSettings(string key, string value)
     {
-        var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        var configFile = ConfigurationManager.OpenMappedExeConfiguration( _fileMap, ConfigurationUserLevel.None);
         var settings = configFile.AppSettings.Settings;
         if (settings[key] == null)
         {
