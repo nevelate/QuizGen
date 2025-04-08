@@ -18,12 +18,9 @@ namespace QuizGen.Views;
 
 public partial class HomePageView : UserControl
 {
-    private ExeConfigurationFileMap _fileMap = new ExeConfigurationFileMap();
-
     public HomePageView()
     {
         InitializeComponent();
-        _fileMap.ExeConfigFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "QuizGen", "app.config");
         Loaded += HomePageView_Loaded;
     }
 
@@ -31,15 +28,13 @@ public partial class HomePageView : UserControl
     {
         if (DataContext is HomePageViewModel vm) vm.TopLevel = TopLevel.GetTopLevel(this);
 
-        var appSettings = ConfigurationManager.OpenMappedExeConfiguration(_fileMap, ConfigurationUserLevel.None).AppSettings.Settings;
-
-        if (appSettings["Theme"] != null)
+        if (AppSettings.GetSetting("Theme") != null)
         {
-            (ThemeMenuItem.GetLogicalChildren().ElementAt(int.Parse(appSettings["Theme"].Value)) as MenuItem).IsChecked = true;
+            (ThemeMenuItem.GetLogicalChildren().ElementAt(int.Parse(AppSettings.GetSetting("Theme"))) as MenuItem).IsChecked = true;
         }
-        if (appSettings["Backdrop"] != null)
+        if (AppSettings.GetSetting("Backdrop") != null)
         {
-            (BackdropMenuItem.GetLogicalChildren().ElementAt(int.Parse(appSettings["Backdrop"].Value)) as MenuItem).IsChecked = true;
+            (BackdropMenuItem.GetLogicalChildren().ElementAt(int.Parse(AppSettings.GetSetting("Backdrop"))) as MenuItem).IsChecked = true;
         }
     }
 
@@ -117,7 +112,7 @@ public partial class HomePageView : UserControl
         {
             var mainWindow = this.GetLogicalAncestors().First(l => l is MainWindow) as MainWindow;
             mainWindow?.ChangeTransparency((sender as Control).GetLogicalChildren().IndexOf(menuItem));
-            AddUpdateAppSettings("Backdrop", (sender as Control).GetLogicalChildren().IndexOf(menuItem).ToString());
+            AppSettings.SetSetting("Backdrop", (sender as Control).GetLogicalChildren().IndexOf(menuItem).ToString());
         }
     }
 
@@ -131,7 +126,7 @@ public partial class HomePageView : UserControl
                 2 => ThemeVariant.Light,
                 3 => ThemeVariant.Dark,
             };
-            AddUpdateAppSettings("Theme", (sender as Control).GetLogicalChildren().IndexOf(menuItem).ToString());
+            AppSettings.SetSetting("Theme", (sender as Control).GetLogicalChildren().IndexOf(menuItem).ToString());
         }
     }
 
@@ -162,21 +157,5 @@ public partial class HomePageView : UserControl
                 throw;
             }
         }
-    }
-
-    private void AddUpdateAppSettings(string key, string value)
-    {
-        var configFile = ConfigurationManager.OpenMappedExeConfiguration( _fileMap, ConfigurationUserLevel.None);
-        var settings = configFile.AppSettings.Settings;
-        if (settings[key] == null)
-        {
-            settings.Add(key, value);
-        }
-        else
-        {
-            settings[key].Value = value;
-        }
-        configFile.Save(ConfigurationSaveMode.Modified);
-        ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
     }
 }
